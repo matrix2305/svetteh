@@ -4,7 +4,7 @@
 namespace Infrastructure\Interfaces;
 
 
-class ICategoriesRepository
+interface ICategoriesRepository
 {
 
 }
