@@ -3,17 +3,17 @@ declare(strict_types = 1);
 namespace Infrastructure\Repository;
 
 
-use AppCore\Entities\Category;
+use AppCore\Entities\Role;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Infrastructure\Interfaces\ICategoriesRepository;
+use Doctrine\ORM\OptimisticLockException;
 use Infrastructure\Interfaces\ILog;
+use Infrastructure\Interfaces\IRolesRepositroy;
 use Infrastructure\Log\Log;
 
-class CategoriesRepository implements ICategoriesRepository
+class RolesRepositroy implements IRolesRepositroy
 {
     /**
      * @var EntityManager|EntityManagerInterface
@@ -26,51 +26,52 @@ class CategoriesRepository implements ICategoriesRepository
     private Log $log;
 
     /**
-     * @var string of entity class Category
+     * @var string of entity Role type class
      */
-    private $category;
+    private $role;
 
     public function __construct(EntityManagerInterface $em, ILog $log)
     {
         $this->em = $em;
         $this->log = $log;
-        $this->category = Category::class;
+        $this->role = Role::class;
     }
 
     /**
-     * Method for get all categories
+     * Method for get all roles
      * @return array
      */
-    public function getAllCategories() : array
+    public function getAllRoles() : array
     {
-        return $this->em->getRepository($this->category)->findAll();
+        return $this->em->getRepository($this->role)->findAll();
     }
 
     /**
-     * Method for get one category
+     * Method for get one role
      * @param int $id
-     * @return Category
+     * @return Role
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function getOneCategory(int $id) : Category
+    public function getOneRole(int $id) : Role
     {
-        return $this->em->find($this->category, $id);
+        return $this->em->find($this->role, $id);
     }
 
     /**
-     * Method for add category
-     * @param Category $category
+     * Method for add role
+     * @param Role $role
      * @return string
+     * @throws ConnectionException
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addCategory(Category $category)
+    public function addRole(Role $role)
     {
         $this->em->getConnection()->beginTransaction();
         try {
-            $this->em->persist($category);
+            $this->em->persist($role);
             $this->em->flush();
             $this->em->getConnection()->commit();
         }catch (ConnectionException $exception){
@@ -81,18 +82,18 @@ class CategoriesRepository implements ICategoriesRepository
     }
 
     /**
-     * Method for update category
+     * Method for update role
      * @param array $data
      * @return string
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function updateCategory(array $data){
+    public function updateRole(array $data)
+    {
         try {
-            $entity = $this->em->find($this->category, $data['id'], LockMode::OPTIMISTIC);
-            $entity->setCategoryName($data['category_name']);
-            $entity->setCategoryColor($data['category_color']);
-            $this->em->flush();
+            $entity = $this->em->find($this->role, $data['id'], LockMode::OPTIMISTIC);
+            $entity->setRoleColor($data['role_color']);
+            $entity->setRoleName($data['role_name']);
         }catch (OptimisticLockException $exception){
             $this->log->AddLog($exception->getMessage());
             return $exception->getMessage();
@@ -100,16 +101,20 @@ class CategoriesRepository implements ICategoriesRepository
     }
 
     /**
-     * Method for delete category
-     * @param Category $category
+     * Method for delete role
+     * @param int $id
      * @return string
+     * @throws ConnectionException
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function deleteCategory(Category $category){
+    public function deleteRole(int $id)
+    {
+        $entity = $this->em->find($this->role, $id);
         $this->em->getConnection()->beginTransaction();
         try {
-            $this->em->remove($category);
+            $this->em->remove($entity);
             $this->em->flush();
             $this->em->getConnection()->commit();
         }catch (ConnectionException $exception){

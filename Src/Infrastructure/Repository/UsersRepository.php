@@ -8,12 +8,24 @@ use Doctrine\DBAL\ConnectionException;
 use Infrastructure\Interfaces\ILog;
 use Infrastructure\Interfaces\IUsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Infrastructure\Log\Log;
 
 class UsersRepository implements IUsersRepository
 {
+    /**
+     * @var EntityManagerInterface
+     */
     private EntityManagerInterface $em;
+
+    /**
+     * @var string of entity User type class
+     */
     private $user;
-    private ILog $Log;
+
+    /**
+     * @var ILog|Log
+     */
+    private Log $Log;
 
     public function __construct(EntityManagerInterface $em, ILog $log)
     {
@@ -26,7 +38,7 @@ class UsersRepository implements IUsersRepository
      * Method for get all users
      * @return array
      */
-    public function GetAllUsers() : array
+    public function getAllUsers() : array
     {
         return $this->em->getRepository($this->user)->findAll();
     }
@@ -36,7 +48,7 @@ class UsersRepository implements IUsersRepository
      * @param $id
      * @return User
      */
-    public function GetOneUser($id) : User
+    public function getOneUser($id) : User
     {
         return $this->em->find($this->user, $id);
     }
@@ -47,7 +59,7 @@ class UsersRepository implements IUsersRepository
      * @return string
      * @throws ConnectionException
      */
-    public function AddUser(User $user)
+    public function addUser(User $user)
     {
         $this->em->getConnection()->beginTransaction();
         try {
@@ -68,7 +80,7 @@ class UsersRepository implements IUsersRepository
      * @throws ConnectionException
      */
 
-    public function UpdateUser(array $data)
+    public function updateUser(array $data)
     {
         $this->em->getConnection()->beginTransaction();
         try {
@@ -96,7 +108,7 @@ class UsersRepository implements IUsersRepository
      * @return string
      */
 
-    public function DeleteUser(int $id)
+    public function deleteUser(int $id)
     {
         $this->em->getConnection()->beginTransaction();
         try {

@@ -23,44 +23,51 @@ body{
     font-family: 'Ubuntu', 'Arial', sans-serif;
 }
 
-header{
-
+.wrapper {
+    -webkit-box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
+    width: 1200px;
+    margin: 0 auto;
+}
 
 .hcontent{
     width: 1200px;
     margin: 0 auto;
     background-color: $header_color;
-    border-bottom: 3px solid $footer_color;
+    border-bottom: 2px solid $footer_color;
     border-radius: 3px 3px 0 0;
-}
 }
 
 
 .navbar{
-    margin: 0 auto;
+    border-top: 2px solid $footer_color;
     display: flow-root;
 }
 
 .navbar ul{
     list-style: none;
-    padding: 0;
     display: flex;
-    margin: 0 auto;
-
+    margin: 5px 0 3px 0;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .navbar ul li{
-    position: relative;
+
 }
 
 .navbar ul li a{
     color: black;
     text-transform: uppercase;
-    padding: 5px;
+    padding: 5px 5px 3px 5px;
+    font-size: 20px;
+    font-weight: 400;
 }
 
 .navbar ul li a:hover{
-    background-color: $footer_color;
+    background-color: $green_color;
     color: white;
 }
 
@@ -188,7 +195,7 @@ header{
 }
 
 .sidebar ul li a:hover{
-    background-color: $footer_color;
+    background-color: $green_color;
     color: white;
 }
 
@@ -196,8 +203,8 @@ header{
     background-color: $footer_color;
 }
 
-#active-ul{
-    background-color: $green_color;
+#active{
+    background-color: $footer_color;
     color: white;
 }
 
