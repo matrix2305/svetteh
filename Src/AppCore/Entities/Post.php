@@ -44,12 +44,12 @@ class Post
     private string $text;
 
     /**
-     * @ORM\Column(name="image_path", type="string", cascade={"persist", "remove"})
+     * @ORM\Column(name="image_path", type="string")
      */
     private string $imgPath;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="post", cascade={"persist", "remove"}, fetch="EAGER")
      */
     private User $user;
 

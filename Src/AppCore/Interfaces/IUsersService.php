@@ -4,14 +4,14 @@ namespace AppCore\Interfaces;
 
 interface IUsersService
 {
-    public function GetAllUsers();
+    public function getAllUsers();
 
-    public function GetOneUser($id);
+    public function getOneUser($id);
 
-    public function AddUser(array $data);
+    public function addUser(array $data);
 
-    public function UpdateUser(array $data);
+    public function updateUser(array $data);
 
-    public function DeleteUser($id);
+    public function deleteUser($id);
 
 }

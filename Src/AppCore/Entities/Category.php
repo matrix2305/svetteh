@@ -16,8 +16,8 @@ class Category
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="id", type"integer")
-     * @ORM\GeneratedValue(strategy = "IDENTITY")
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private int $id;
 
@@ -28,7 +28,7 @@ class Category
     private string $createdAt;
 
     /**
-     * @Version @Column(name="updated_at", type = "datetime")
+     * @Version @ORM\Column(name="updated_at", type = "datetime")
      */
     private string $updatedAt;
     /**
@@ -37,12 +37,12 @@ class Category
     private string $categoryName;
 
     /**
-     * @ORM\Column (name="category_color, type="string")
+     * @ORM\Column (name="category_color", type="string")
      */
     private string $categoryColor;
 
     /**
-     * @ORM\ManyToMany(targetEntyty="Post", mappedBy="categories", cascade={ "persist", "remove" }, fetch ="LAZY")
+     * @ORM\ManyToMany(targetEntity="Post", mappedBy="categories", cascade={ "persist", "remove" }, fetch ="LAZY")
      */
     private ArrayCollection $posts;
 

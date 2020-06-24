@@ -42,7 +42,6 @@
       <excludeFolder url="file://$MODULE_DIR$/Presentation/vendor/laminas/laminas-code" />
       <excludeFolder url="file://$MODULE_DIR$/Presentation/vendor/laminas/laminas-eventmanager" />
       <excludeFolder url="file://$MODULE_DIR$/Presentation/vendor/laminas/laminas-zendframework-bridge" />
-      <excludeFolder url="file://$MODULE_DIR$/Presentation/vendor/laravel-doctrine/acl" />
       <excludeFolder url="file://$MODULE_DIR$/Presentation/vendor/laravel-doctrine/extensions" />
       <excludeFolder url="file://$MODULE_DIR$/Presentation/vendor/laravel-doctrine/migrations" />
       <excludeFolder url="file://$MODULE_DIR$/Presentation/vendor/laravel-doctrine/orm" />

@@ -6,24 +6,28 @@ namespace AppCore\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\Version;
-use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
-use LaravelDoctrine\ACL\Permissions\HasPermissions;
-use LaravelDoctrine\ACL\Mappings as ACL;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="roles")
  */
-class Role implements RoleContract
+class Role
 {
-    use HasPermissions;
-
     /**
      * @ORM\Id
      * @ORM\Column (name="id", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private int $id;
+    /**
+     * @ORM\Column(name="role", type="string")
+     */
+    private string $role;
+
+    /**
+     * @ORM\Column(name="color", type="string")
+     */
+    private string $roleColor;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -32,19 +36,14 @@ class Role implements RoleContract
     private string $createdAt;
 
     /**
-     * @Version @Column(name="updated_at", type="datetime")
+     * @Version @ORM\Column(name="updated_at", type="datetime")
      */
     private string $updatedAt;
 
     /**
-     * @ORM\Column(name="role_name", type="string")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="role", cascade={"persist", "remove"}, fetch="LAZY")
      */
-    private string $roleMame;
-
-    /**
-     * @ORM\Column(name="role_column", type="string")
-     */
-    private string $roleColor;
+    private User $user;
 
     /**
      * Method for get id of role
@@ -55,14 +54,6 @@ class Role implements RoleContract
         return $this->id;
     }
 
-    /**
-     * Method for set id of role
-     * @param int $id
-     */
-    public function setId(int $id) : void
-    {
-        $this->id = $id;
-    }
 
     /**
      * Method for get role name
@@ -70,16 +61,16 @@ class Role implements RoleContract
      */
     public function getName() : string
     {
-        return $this->roleMame;
+        return $this->role;
     }
 
     /**
      * Method for set role name
-     * @param string $roleName
+     * @param string $role
      */
-    public function setName(string $roleName) : void
+    public function setName(string $role) : void
     {
-        $this->roleName = $roleName;
+        $this->role = $role;
     }
 
     /**
@@ -100,12 +91,14 @@ class Role implements RoleContract
         $this->roleColor = $roleColor;
     }
 
-    public function getPermissions()
+    public function getUpdatedAt()
     {
-        return $this->permissions;
+        return $this->updatedAt;
     }
 
-    public function setPermissions($permissions){
-        $this->permissions = $permissions;
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
+
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "182452d2a561d31fccb82632572d51f2",
+    "content-hash": "cfea7c6a4c0c73627ec5ce46be594b98",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2073,64 +2073,6 @@
             "time": "2020-05-20T16:45:56+00:00"
         },
         {
-            "name": "laravel-doctrine/acl",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel-doctrine/acl.git",
-                "reference": "c6ac78a35606523ff0f1a4fc7a305df33a43f925"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel-doctrine/acl/zipball/c6ac78a35606523ff0f1a4fc7a305df33a43f925",
-                "reference": "c6ac78a35606523ff0f1a4fc7a305df33a43f925",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/auth": "^7.0",
-                "illuminate/config": "^7.0",
-                "illuminate/contracts": "^7.0",
-                "illuminate/support": "^7.0",
-                "laravel-doctrine/orm": "~1.6.0",
-                "php": "^7.2.5"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.3.1",
-                "phpunit/phpunit": "^8.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "LaravelDoctrine\\ACL\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Patrick Brouwers",
-                    "email": "patrick@maatwebsite.nl"
-                }
-            ],
-            "description": "Doctrine ACL for Doctrine 2 and Laravel 7",
-            "keywords": [
-                "abilities",
-                "acl",
-                "data mapper",
-                "database",
-                "doctrine",
-                "laravel",
-                "organisations",
-                "orm",
-                "permissions",
-                "policies",
-                "roles"
-            ],
-            "time": "2020-03-08T22:31:17+00:00"
-        },
-        {
             "name": "laravel-doctrine/extensions",
             "version": "1.2.0",
             "source": {
@@ -2346,16 +2288,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v7.17.1",
+            "version": "v7.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6633c4017b311d3aaae842edabd567c637afc39c"
+                "reference": "d16ff3a0a66d98e04163456b39c4b7302cf50a40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6633c4017b311d3aaae842edabd567c637afc39c",
-                "reference": "6633c4017b311d3aaae842edabd567c637afc39c",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d16ff3a0a66d98e04163456b39c4b7302cf50a40",
+                "reference": "d16ff3a0a66d98e04163456b39c4b7302cf50a40",
                 "shasum": ""
             },
             "require": {
@@ -2499,7 +2441,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2020-06-23T15:22:07+00:00"
+            "time": "2020-06-24T13:11:25+00:00"
         },
         {
             "name": "laravel/tinker",

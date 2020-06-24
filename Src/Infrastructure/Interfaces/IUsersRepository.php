@@ -7,13 +7,13 @@ use AppCore\Entities\User;
 
 interface IUsersRepository
 {
-    public function GetAllUsers();
+    public function getAllUsers();
 
-    public function GetOneUser($id);
+    public function getOneUser($id);
 
-    public function AddUser(User $user);
+    public function addUser(User $user);
 
-    public function UpdateUser(array $data);
+    public function updateUser(array $data);
 
-    public function DeleteUser(int $id);
+    public function deleteUser(int $id);
 }

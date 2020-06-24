@@ -4,82 +4,62 @@ namespace AppCore\Services;
 
 
 use AppCore\DTO\UsersDTO;
+use AppCore\Entities\Role;
 use AppCore\Entities\User;
 use AppCore\Interfaces\IUsersService;
 use Infrastructure\Interfaces\ILog;
+use Infrastructure\Interfaces\IRolesRepositroy;
 use Infrastructure\Interfaces\IUsersRepository;
 use Infrastructure\Log\Log;
+use Infrastructure\Repository\RolesRepositroy;
 use Infrastructure\Repository\UsersRepository;
-use Mockery\Exception;
 
 class UsersService implements IUsersService
 {
     private Log $Log;
     private UsersRepository $UsersRepository;
+    private RolesRepositroy $RolesRepository;
 
-    public function __construct(IUsersRepository $usersRepository, ILog $log)
+    public function __construct(IUsersRepository $usersRepository, ILog $log, IRolesRepositroy $rolesRepositroy)
     {
         $this->UsersRepository = $usersRepository;
         $this->Log = $log;
+        $this->RolesRepository = $rolesRepositroy;
     }
 
-    public function GetAllUsers()
+    public function getAllUsers() : array
     {
-        try {
-            $GetAllUsers = $this->UsersRepository->GetAllUsers();
-            return UsersDTO::formCollection($GetAllUsers);
-        }catch (Exception $exception){
-            $this->Log->AddLog($exception->getMessage());
-            return $exception->getMessage();
-        }
+        $GetAllUsers = $this->UsersRepository->GetAllUsers();
+        return UsersDTO::formCollection($GetAllUsers);
     }
 
-    public function GetOneUser($id)
+    public function getOneUser($id) : UsersDTO
     {
-        try {
-            $GetOneUser = $this->UsersRepository->GetOneUser($id);
-            return UsersDTO::formEntity($GetOneUser);
-        }catch (Exception $exception){
-            $this->Log->AddLog($exception->getMessage());
-            return $exception->getMessage();
-        }
+        $GetOneUser = $this->UsersRepository->GetOneUser($id);
+        return UsersDTO::formEntity($GetOneUser);
     }
 
-    public function AddUser(array $data)
+    public function addUser(array $data) : ?string
     {
-        try {
-            $user = new User();
-            $user->setUsername($data['username']);
-            $user->setEmail($data['email']);
-            $user->setPassword($data['password']);
-            $user->setName($data['name']);
-            $user->setLastname($data['lastname']);
-
-            $this->UsersRepository->AddUser($user);
-        }catch (Exception $exception){
-            $this->Log->AddLog($exception->getMessage());
-            return $exception->getMessage();
-        }
+        $role = $this->RolesRepository->getOneRole(1);
+        $user = new User();
+        $user->setUsername($data['username']);
+        $user->setEmail($data['email']);
+        $user->setPassword($data['password']);
+        $user->setName($data['name']);
+        $user->setLastname($data['lastname']);
+        $user->setRole($role);
+        $this->UsersRepository->AddUser($user);
     }
 
-    public function UpdateUser(array $data)
+    public function updateUser(array $data) : void
     {
-        try {
-            $this->UsersRepository->UpdateUser($data);
-        }catch (Exception $exception){
-            $this->Log->AddLog($exception->getMessage());
-            return $exception->getMessage();
-        }
+        $this->UsersRepository->updateUser($data);
     }
 
-    public function DeleteUser($id)
+    public function deleteUser($id) : void
     {
-        try {
-            $this->UsersRepository->DeleteUser($id);
-        }catch (Exception $exception){
-            $this->Log->AddLog($exception->getMessage());
-            return $exception->getMessage();
-        }
+        $this->UsersRepository->deleteUser($id);
     }
 
 }

@@ -4,12 +4,13 @@ namespace AppCore\Services;
 
 
 use AppCore\Entities\Category;
+use AppCore\Interfaces\ICategoriesService;
 use Infrastructure\Interfaces\ICategoriesRepository;
 use Infrastructure\Interfaces\ILog;
 use Infrastructure\Log\Log;
 use Infrastructure\Repository\CategoriesRepository;
 
-class CategoriesService
+class CategoriesService implements ICategoriesService
 {
     /**
      * @var CategoriesRepository

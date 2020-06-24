@@ -128,7 +128,6 @@
       <path value="$PROJECT_DIR$/Presentation/vendor/ramsey/uuid" />
       <path value="$PROJECT_DIR$/Presentation/vendor/ramsey/collection" />
       <path value="$PROJECT_DIR$/Presentation/vendor/league/flysystem" />
-      <path value="$PROJECT_DIR$/Presentation/vendor/laravel-doctrine/acl" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />

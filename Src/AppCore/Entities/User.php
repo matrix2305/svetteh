@@ -6,30 +6,22 @@ namespace AppCore\Entities;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use LaravelDoctrine\ACL\Contracts\Permission;
-use LaravelDoctrine\ACL\Contracts\Role;
-use LaravelDoctrine\ACL\Permissions\HasPermissions;
 use LaravelDoctrine\ORM\Notifications\Notifiable;
 use LaravelDoctrine\ORM\Auth\Authenticatable as DoctrineAuth;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\Version;
 use Doctrine\Common\Collections\ArrayCollection;
-use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
-use LaravelDoctrine\ACL\Roles\HasRoles;
-use LaravelDoctrine\ACL\Mappings as ACL;
-use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
+
+
 
 /**
- * Class Users
- * @package AppCore\Entities
- *
  * @ORM\Entity
  * @ORM\Table(name="users")
  */
-class User implements Authenticatable, CanResetPasswordContract, HasRolesContract, HasPermissionContract
+class User implements Authenticatable, CanResetPasswordContract
 {
-    use DoctrineAuth, CanResetPassword, Notifiable, HasRoles, HasPermissions;
+    use DoctrineAuth, CanResetPassword, Notifiable;
 
     /**
      * @ORM\Column(name="id", type="bigint")
@@ -63,33 +55,27 @@ class User implements Authenticatable, CanResetPasswordContract, HasRolesContrac
 
     /**
      * @var string $name
-     * @ORM\Column(name="name", type="string")
+     * @ORM\Column(name="name", type="string", nullable=true)
      */
-    private string $name;
+    private ?string $name;
 
     /**
      * @var string $lastname
-     * @ORM\Column(name="lastname", type="string")
+     * @ORM\Column(name="lastname", type="string", nullable=true)
      */
-    private string $lastname;
+    private ?string $lastname;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="users", cascade={"persist", "remove"}, fetch = "LAZY")
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="user", cascade={"persist", "remove"}, fetch = "LAZY")
      */
     private ArrayCollection $posts;
 
 
     /**
-     * @ACL\HasRoles()
-     * @var \Doctrine\Common\Collections\ArrayCollection|\LaravelDoctrine\ACL\Contracts\Role[]
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="user", cascade={"persist"}, fetch = "EAGER")
      */
-    private $roles;
-
-    /**
-     * @ACL\HasPermissions
-     */
-    private $permissions;
+    private Role $role;
 
     public function __construct()
     {
@@ -163,7 +149,7 @@ class User implements Authenticatable, CanResetPasswordContract, HasRolesContrac
      * Method for set name of user
      * @param string $name
      */
-    public function setName(string $name) : void
+    public function setName(?string $name) : void
     {
         $this->name = $name;
     }
@@ -181,36 +167,29 @@ class User implements Authenticatable, CanResetPasswordContract, HasRolesContrac
      * Method for set lastname of user
      * @param string $lastname
      */
-    public function setLastname(string $lastname) : void
+    public function setLastname(?string $lastname) : void
     {
         $this->lastname = $lastname;
     }
 
 
-    public function getRoles()
+    public function getRole()
     {
-        return $this->roles;
+        return $this->role;
     }
 
-    public function setRoles($roles)
+    public function setRole(Role $role)
     {
-        $this->roles = $roles;
+        $this->roles = $role;
     }
 
-    /**
-     * @return ArrayCollection|Permission[]
-     */
-    public function getPermissions(){
-
-        return $this->permissions;
-
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
-    /**
-     * @param string $permission
-     */
-    public function setPermissions($permissions)
+    public function getCreatedAt()
     {
-        $this->permissions = $permissions;
+        return $this->createdAt;
     }
 }

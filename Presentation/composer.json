@@ -23,7 +23,6 @@
         "fruitcake/laravel-cors": "^1.0",
         "gedmo/doctrine-extensions": "^2.4",
         "guzzlehttp/guzzle": "^6.3",
-        "laravel-doctrine/acl": "^1.2",
         "laravel-doctrine/extensions": "^1.2",
         "laravel-doctrine/migrations": "^2.1",
         "laravel-doctrine/orm": "1.6.*",
