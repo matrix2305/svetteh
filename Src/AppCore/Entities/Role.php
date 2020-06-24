@@ -4,47 +4,47 @@
 namespace AppCore\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ORM\Mapping\Version;
+use LaravelDoctrine\ACL\Contracts\Role as RoleContract;
+use LaravelDoctrine\ACL\Permissions\HasPermissions;
+use LaravelDoctrine\ACL\Mappings as ACL;
 
 /**
- * Class Role
- * @package AppCore\Entities
  * @ORM\Entity
- * @ORM\(table = "roles")
+ * @ORM\Table(name="roles")
  */
-class Role
+class Role implements RoleContract
 {
+    use HasPermissions;
+
     /**
      * @ORM\Id
-     * @ORM\Column(name = "id", type="bigint")
+     * @ORM\Column (name="id", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private int $id;
 
     /**
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name = "created_at", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private string $createdAt;
 
     /**
-     * @Version @Column(name = "updated_at", type = "datetime")
+     * @Version @Column(name="updated_at", type="datetime")
      */
     private string $updatedAt;
 
     /**
-     * @ORM\Column(name = "role_name", type = "string")
+     * @ORM\Column(name="role_name", type="string")
      */
     private string $roleMame;
 
     /**
-     * @ORM\Column(name = "role_column", type = "string")
+     * @ORM\Column(name="role_column", type="string")
      */
     private string $roleColor;
-
-    /**
-     * @OneToMany(targetEntity = "User", mappedBy="roles", cascade={"persist", "remove"}, fetch = "LAZY")
-     */
-    private User $user;
 
     /**
      * Method for get id of role
@@ -68,7 +68,7 @@ class Role
      * Method for get role name
      * @return string
      */
-    public function getRoleName() : string
+    public function getName() : string
     {
         return $this->roleMame;
     }
@@ -77,7 +77,7 @@ class Role
      * Method for set role name
      * @param string $roleName
      */
-    public function setRoleName(string $roleName) : void
+    public function setName(string $roleName) : void
     {
         $this->roleName = $roleName;
     }
@@ -98,5 +98,14 @@ class Role
     public function setRoleColor(string $roleColor) : void
     {
         $this->roleColor = $roleColor;
+    }
+
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    public function setPermissions($permissions){
+        $this->permissions = $permissions;
     }
 }

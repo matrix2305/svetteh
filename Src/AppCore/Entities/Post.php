@@ -3,57 +3,58 @@ declare(strict_types = 1);
 namespace AppCore\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use LaravelDoctrine\Extensions\Timestamps\Timestamps;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ORM\Mapping\Version;
 
 /**
  * Class Post
  * @package AppCore\Entities
  * @ORM\Entity
- * @ORM\(table = "posts")
+ * @ORM\Table(name="posts")
  */
 class Post
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name = "id", type="bigint")
+     * @ORM\Column(name="id", type="bigint")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private int $id;
 
     /**
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name = "created_at", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private string $createdAt;
 
     /**
-     * @Version @Column(name = "updated_at", type = "datetime")
+     * @Version @ORM\Column(name="updated_at", type="datetime")
      */
     private string $updatedAt;
 
     /**
-     * @ORM\Column(name = "tittle", type="string")
+     * @ORM\Column(name="tittle", type="string")
      */
     private string $tittle;
 
     /**
-     * @ORM\Column(name = "text", type="text")
+     * @ORM\Column(name="text", type="text")
      */
     private string $text;
 
     /**
-     * @ORM\Column(name = "image_path", type = "string", cascade={"persist", "remove"})
+     * @ORM\Column(name="image_path", type="string", cascade={"persist", "remove"})
      */
     private string $imgPath;
 
     /**
-     * @ManyToOne(targetEntity = "User", inversedBy="posts", cascade = {"persist", "remove"}, fetch = "EAGER")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts", cascade={"persist", "remove"}, fetch="EAGER")
      */
     private User $user;
 
     /**
-     * @ManyToMany(targetEntity = "Category", inversedBy = "posts", cascade = { "persist", "remove" }, fetch = "EAGER")
+     * @ORM\ManyToMany(targetEntity = "Category", inversedBy = "posts", cascade = { "persist", "remove" }, fetch = "EAGER")
      */
     private ArrayCollection $categories;
 

@@ -164,6 +164,7 @@ return [
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class,
         LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
+        LaravelDoctrine\ACL\AclServiceProvider::class,
 
         /*
          * Package Service Providers...

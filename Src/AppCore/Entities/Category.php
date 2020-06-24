@@ -5,18 +5,18 @@ namespace AppCore\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ORM\Mapping\Version;
 
 /**
- * Class Category
- * @package AppCore\Entities
- * @ORM\Entity
- * @ORM\Table (name = "categories")
+ * @ORM\Entity()
+ * @ORM\Table(name="categories")
  */
 class Category
 {
     /**
      * @ORM\Id
-     * @ORM\Column (name = "id", type"bigint")
+     * @ORM\Column(name="id", type"integer")
      * @ORM\GeneratedValue(strategy = "IDENTITY")
      */
     private int $id;
@@ -28,45 +28,27 @@ class Category
     private string $createdAt;
 
     /**
-     * @Version @Column(name = "updated_at", type = "datetime")
+     * @Version @Column(name="updated_at", type = "datetime")
      */
     private string $updatedAt;
     /**
-     * @ORM\Column (name = "category_name", type = "string")
+     * @ORM\Column (name="category_name", type="string")
      */
     private string $categoryName;
 
     /**
-     * @ORM\Column (name = "category_color, type = "string")
+     * @ORM\Column (name="category_color, type="string")
      */
     private string $categoryColor;
 
     /**
-     * @ManyToMany(targetEntyty = "Post", mappedBy = "categories", cascade = { "persist", "remove" }, fetch = "LAZY")
+     * @ORM\ManyToMany(targetEntyty="Post", mappedBy="categories", cascade={ "persist", "remove" }, fetch ="LAZY")
      */
     private ArrayCollection $posts;
 
     public function __construct()
     {
         $this->posts = new ArrayCollection();
-    }
-
-    /**
-     * Method for get posts of category
-     * @return ArrayCollection
-     */
-    public function getPosts() : ArrayCollection
-    {
-        return $this->posts;
-    }
-
-    /**
-     * Method for set posts of category
-     * @param ArrayCollection $posts
-     */
-    public function setPosts(ArrayCollection $posts) : void
-    {
-        $this->posts = $posts;
     }
 
     /**
