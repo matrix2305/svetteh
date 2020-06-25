@@ -1,7 +1,7 @@
 <?php
 namespace Infrastructure\Log;
 
-use Infrastructure\Interfaces\ILog;
+use AppCore\Interfaces\ILog;
 
 class Log implements ILog
 {

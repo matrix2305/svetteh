@@ -34,22 +34,22 @@ class User implements Authenticatable, CanResetPasswordContract
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name = "created_at", type="datetime")
      */
-    private string $createdAt;
+    private $createdAt;
 
     /**
      * @Version @ORM\Column(name = "updated_at", type = "datetime")
      */
-    private string $updatedAt;
+    private $updatedAt;
 
     /**
      * @var string $username
-     * @ORM\Column(name="username", type="string")
+     * @ORM\Column(name="username", type="string", unique=true)
      */
-    private string $username;
+    private $username;
 
     /**
      * @var string $email
-     * @ORM\Column(name="email", type="string")
+     * @ORM\Column(name="email", type="string", unique=true)
      */
     private string $email;
 
@@ -69,7 +69,7 @@ class User implements Authenticatable, CanResetPasswordContract
     /**
      * @ORM\OneToMany(targetEntity="Post", mappedBy="user", cascade={"persist", "remove"}, fetch = "LAZY")
      */
-    private ArrayCollection $posts;
+    private $posts;
 
 
     /**

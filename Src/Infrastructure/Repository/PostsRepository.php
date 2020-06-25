@@ -8,9 +8,8 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
-use Infrastructure\Interfaces\ILog;
-use Infrastructure\Interfaces\IPostRepository;
-use Infrastructure\Log\Log;
+use AppCore\Interfaces\ILog;
+use AppCore\Interfaces\IPostRepository;
 
 class PostsRepository implements IPostRepository
 {
@@ -20,9 +19,9 @@ class PostsRepository implements IPostRepository
     private EntityManager $em;
 
     /**
-     * @var ILog|Log
+     * @var ILog
      */
-    private Log $log;
+    private ILog $log;
 
     /**
      * @var string of entity class Post

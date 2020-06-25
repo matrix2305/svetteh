@@ -9,7 +9,7 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Infrastructure\Interfaces\ICategoriesRepository;
+use AppCore\Interfaces\ICategoriesRepository;
 use Infrastructure\Interfaces\ILog;
 use Infrastructure\Log\Log;
 

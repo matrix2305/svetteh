@@ -2,24 +2,18 @@
 declare(strict_types = 1);
 namespace AppCore\Services;
 
-use AppCore\Entities\Post;
 use AppCore\Interfaces\IPostsService;
-use Infrastructure\Interfaces\IPostRepository;
-use Infrastructure\Log\Log;
-use Infrastructure\Interfaces\ILog;
-use Infrastructure\Repository\PostsRepository;
+use AppCore\Interfaces\IPostRepository;
+use AppCore\Interfaces\ILog;
 
 class PostsService implements IPostsService
 {
-    /**
-     * @var PostsRepository
-     */
-    private PostsRepository $postsRepository;
+    private IPostRepository $postsRepository;
 
     /**
      * @var Log
      */
-    private Log $log;
+    private ILog $log;
 
     public function __construct(IPostRepository $postsRepository, ILog $log)
     {

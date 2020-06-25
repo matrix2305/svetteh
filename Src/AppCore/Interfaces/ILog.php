@@ -1,5 +1,5 @@
 <?php
-namespace Infrastructure\Interfaces;
+namespace AppCore\Interfaces;
 
 
 interface ILog

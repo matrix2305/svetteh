@@ -1,12 +1,10 @@
 <?php
-
-
-namespace Infrastructure\Interfaces;
+namespace AppCore\Interfaces;
 
 
 use AppCore\Entities\Role;
 
-interface IRolesRepositroy
+interface IRolesRepository
 {
     public function getAllRoles();
 

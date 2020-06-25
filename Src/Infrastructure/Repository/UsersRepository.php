@@ -5,10 +5,9 @@ namespace Infrastructure\Repository;
 
 use AppCore\Entities\User;
 use Doctrine\DBAL\ConnectionException;
-use Infrastructure\Interfaces\ILog;
-use Infrastructure\Interfaces\IUsersRepository;
+use AppCore\Interfaces\IUsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Infrastructure\Log\Log;
+use AppCore\Interfaces\ILog;
 
 class UsersRepository implements IUsersRepository
 {
@@ -23,9 +22,9 @@ class UsersRepository implements IUsersRepository
     private $user;
 
     /**
-     * @var ILog|Log
+     * @var ILog
      */
-    private Log $Log;
+    private ILog $Log;
 
     public function __construct(EntityManagerInterface $em, ILog $log)
     {

@@ -9,11 +9,10 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
-use Infrastructure\Interfaces\ILog;
-use Infrastructure\Interfaces\IRolesRepositroy;
-use Infrastructure\Log\Log;
+use AppCore\Interfaces\ILog;
+use AppCore\Interfaces\IRolesRepository;
 
-class RolesRepositroy implements IRolesRepositroy
+class RolesRepository implements IRolesRepository
 {
     /**
      * @var EntityManager|EntityManagerInterface
@@ -21,9 +20,9 @@ class RolesRepositroy implements IRolesRepositroy
     private EntityManager $em;
 
     /**
-     * @var ILog|Log
+     * @var ILog
      */
-    private Log $log;
+    private ILog $log;
 
     /**
      * @var string of entity Role type class

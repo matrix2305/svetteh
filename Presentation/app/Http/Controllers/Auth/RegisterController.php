@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use AppCore\Entities\User;
 use AppCore\Interfaces\IUsersService;
-use AppCore\Services\UsersService;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class RegisterController extends Controller
 {
@@ -33,7 +32,7 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    private UsersService $UsersService;
+    private IUsersService $UsersService;
 
     /**
      * Create a new controller instance.
@@ -55,8 +54,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required', 'string', 'max:30', 'unique:AppCore\Entities\User'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:AppCore\Entities\User'],
+            'username' => ['required', 'string', 'max:30'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'name' => ['string', 'max:255'],
             'lastname' => ['string', 'max:255']
@@ -71,14 +70,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return $this->UsersService->AddUser(
-            [
-                'username' => $data['username'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'name' => (!empty($data['name']))? $data['name'] : null,
-                'lastname' => (!empty($data['lastname']))? $data['lastname'] : null
-            ]
-        );
+        try {
+            return $this->UsersService->addUser(
+                [
+                    'username' => $data['username'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password']),
+                    'name' => (!empty($data['name']))? $data['name'] : null,
+                    'lastname' => (!empty($data['lastname']))? $data['lastname'] : null
+                ]
+            );
+        }catch (Exception $exception){
+            return redirect()->back()->with('error', 'Korisničko ime ili e-pošta već postoje!');
+        }
     }
 }

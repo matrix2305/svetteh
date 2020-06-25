@@ -1,5 +1,5 @@
 <?php
-namespace Infrastructure\Interfaces;
+namespace AppCore\Interfaces;
 
 
 use AppCore\Entities\Category;

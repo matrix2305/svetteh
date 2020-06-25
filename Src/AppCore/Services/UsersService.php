@@ -4,23 +4,19 @@ namespace AppCore\Services;
 
 
 use AppCore\DTO\UsersDTO;
-use AppCore\Entities\Role;
 use AppCore\Entities\User;
 use AppCore\Interfaces\IUsersService;
-use Infrastructure\Interfaces\ILog;
-use Infrastructure\Interfaces\IRolesRepositroy;
-use Infrastructure\Interfaces\IUsersRepository;
-use Infrastructure\Log\Log;
-use Infrastructure\Repository\RolesRepositroy;
-use Infrastructure\Repository\UsersRepository;
+use AppCore\Interfaces\ILog;
+use AppCore\Interfaces\IUsersRepository;
+use AppCore\Interfaces\IRolesRepository;
 
 class UsersService implements IUsersService
 {
-    private Log $Log;
-    private UsersRepository $UsersRepository;
-    private RolesRepositroy $RolesRepository;
+    private ILog $Log;
+    private IUsersRepository $UsersRepository;
+    private IRolesRepository $RolesRepository;
 
-    public function __construct(IUsersRepository $usersRepository, ILog $log, IRolesRepositroy $rolesRepositroy)
+    public function __construct(IUsersRepository $usersRepository, ILog $log, IRolesRepository $rolesRepositroy)
     {
         $this->UsersRepository = $usersRepository;
         $this->Log = $log;
@@ -39,7 +35,7 @@ class UsersService implements IUsersService
         return UsersDTO::formEntity($GetOneUser);
     }
 
-    public function addUser(array $data) : ?string
+    public function addUser(array $data)
     {
         $role = $this->RolesRepository->getOneRole(1);
         $user = new User();

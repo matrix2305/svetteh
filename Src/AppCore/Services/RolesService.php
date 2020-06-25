@@ -2,17 +2,15 @@
 declare(strict_types = 1);
 namespace AppCore\Services;
 
-
 use AppCore\Entities\Role;
 use AppCore\Interfaces\IRolesService;
-use Infrastructure\Interfaces\IRolesRepositroy;
-use Infrastructure\Repository\RolesRepositroy;
+use AppCore\Interfaces\IRolesRepository;
 
 class RolesService implements IRolesService
 {
-    private RolesRepositroy $RolesRepository;
+    private IRolesRepository $RolesRepository;
 
-    public function __construct(IRolesRepositroy $rolesRepositroy)
+    public function __construct(IRolesRepository $rolesRepositroy)
     {
         $this->RolesRepository = $rolesRepositroy;
     }
