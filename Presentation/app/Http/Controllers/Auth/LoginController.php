@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use AppCore\Interfaces\IUsersService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,14 +37,16 @@ class LoginController extends Controller
      */
     protected $username;
 
+    private IUsersService $UsersService;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(IUsersService $usersService)
     {
         $this->middleware('guest')->except('logout');
+        $this->UsersService = $usersService;
         if(Auth::check()){
             redirect()->route('dashboard');
         }
@@ -51,21 +54,24 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $input = $request->all();
+        $login = $this->UsersService->login($request->input('username'));
+        if(!empty($login)){
+            $login_type = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+            $request->merge([
+                $login_type => $request->input('username'),
+            ]);
+            $credentials = array_merge($request->only($login_type, 'password'));
+            $remember = $request->has('remember');
 
-        $this->validate($request, [
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-
-        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        if(auth()->attempt(array($fieldType => $input['username'], 'password' => $input['password'])))
-        {
-            return redirect($this->redirectTo);
+            if (Auth::attempt($credentials, $remember)) {
+                return redirect($this->redirectTo);
+            }else{
+                return redirect()->route('login')
+                    ->with('error','Niste uneli ispravnu lozinku!');
+            }
         }else{
             return redirect()->route('login')
-                ->with('error','Kredencijali su pogresni!');
+                ->with('error','Korisnik sa ovim korisničkim imenom ne postoji!');
         }
     }
-
 }

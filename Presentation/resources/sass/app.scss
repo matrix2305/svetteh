@@ -48,7 +48,7 @@ body{
 .navbar ul{
     list-style: none;
     display: flex;
-    margin: 5px 0 3px 0;
+    padding: 0;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
@@ -137,30 +137,89 @@ body{
     font-weight: bold;
     background-color: $footer_color;
     color: white;
-    text-align: right;
-    padding: 5px 15px 5px 5px;
+    text-align: left;
+    padding: 5px 5px 5px 15px;
+    float: right;
     position: relative;
-    left: -15px;
+    right: -15px;
+    border-radius: 5px 0 0 5px;
 }
 
 .tittle-section{
-    float: right;
+    float: left;
     width: 200px;
     font-size: 18px;
     font-weight: inherit;
     text-transform: uppercase;
-    text-align: left;
+    text-align: right;
     color: black;
-    padding: 5px 5px 5px 15px;
+    padding: 5px 15px 5px 5px;
     background-color: $sidebar_color;
-    position: relative;
-    right: -17px;
     border-top: 2px solid $footer_color;
-    border-left: 2px solid $footer_color;
+    border-right: 2px solid $footer_color;
     border-bottom: 2px solid $footer_color;
     z-index: 1;
+    border-radius: 0 5px 5px 0;
+    position: relative;
+    left: -15px;
+    top: 30px;
 }
 
+.false-message{
+    padding: 15px;
+    background-color: #f84f56;
+    color: white;
+    margin: 15px 0 15px 0;
+    text-align: center;
+}
+
+.true-message{
+    padding: 15px;
+    background-color: #2d77ff;
+    color: black;
+    margin: 15px 0 15px 0;
+    text-align: center;
+}
+
+.invalid-feedback{
+    display: block;
+    padding: 15px;
+    background-color: #f84f56;
+    color: white;
+    margin: 15px 0 15px 0;
+    text-align: center;
+}
+
+
+input[type=text], input[type=email], input[type=password], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+
+
+input[type=submit], button{
+    background-color: $footer_color;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover, button:hover {
+    background-color: $green_color;
+}
+
+input[type=color]{
+    margin: 5px;
+}
 
 .sidebar{
     flex-basis: 298px;
@@ -180,7 +239,9 @@ body{
 
 .content-section{
     clear: both;
+    padding-top: 50px;
 }
+
 
 .sidebar ul{
     padding: 0;

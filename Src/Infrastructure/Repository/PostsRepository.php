@@ -124,4 +124,88 @@ class PostsRepository implements IPostRepository
             return $exception->getMessage();
         }
     }
+
+    /**
+     * Method for get all categories
+     * @return array
+     */
+    public function getAllCategories() : array
+    {
+        return $this->em->getRepository($this->category)->findAll();
+    }
+
+    /**
+     * Method for get one category
+     * @param int $id
+     * @return Category
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function getOneCategory(int $id) : Category
+    {
+        return $this->em->find($this->category, $id);
+    }
+
+    /**
+     * Method for add category
+     * @param Category $category
+     * @return string
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function addCategory(Category $category) : ?string
+    {
+        $this->em->getConnection()->beginTransaction();
+        try {
+            $this->em->persist($category);
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+        }catch (ConnectionException $exception){
+            $this->log->AddLog($exception->getMessage());
+            $this->em->getConnection()->rollBack();
+            return $exception->getMessage();
+        }
+    }
+
+    /**
+     * Method for update category
+     * @param array $data
+     * @return string
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function updateCategory(array $data) : ?string
+    {
+        try {
+            $entity = $this->em->find($this->category, $data['id'], LockMode::OPTIMISTIC);
+            $entity->setCategoryName($data['category_name']);
+            $entity->setCategoryColor($data['category_color']);
+            $this->em->flush();
+        }catch (OptimisticLockException $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
+    /**
+     * Method for delete category
+     * @param Category $category
+     * @return string
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function deleteCategory(Category $category) : ?string
+    {
+        $this->em->getConnection()->beginTransaction();
+        try {
+            $this->em->remove($category);
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+        }catch (ConnectionException $exception){
+            $this->log->AddLog($exception->getMessage());
+            $this->em->getConnection()->rollBack();
+            return $exception->getMessage();
+        }
+    }
 }

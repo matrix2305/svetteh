@@ -25,14 +25,14 @@ class Category
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name = "created_at", type="datetime")
      */
-    private string $createdAt;
+    private $createdAt;
 
     /**
      * @Version @ORM\Column(name="updated_at", type = "datetime")
      */
-    private string $updatedAt;
+    private $updatedAt;
     /**
-     * @ORM\Column (name="category_name", type="string")
+     * @ORM\Column (name="category_name", type="string", unique=true)
      */
     private string $categoryName;
 
@@ -44,7 +44,7 @@ class Category
     /**
      * @ORM\ManyToMany(targetEntity="Post", mappedBy="categories", cascade={ "persist", "remove" }, fetch ="LAZY")
      */
-    private ArrayCollection $posts;
+    private $posts;
 
     public function __construct()
     {
@@ -100,8 +100,13 @@ class Category
      * Method for get last updated time category
      * @return string
      */
-    public function getUpdatedAt() : string
+    public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

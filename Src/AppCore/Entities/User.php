@@ -73,22 +73,23 @@ class User implements Authenticatable, CanResetPasswordContract
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Role", inversedBy="user", cascade={"persist"}, fetch = "EAGER")
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="user", cascade = {"persist", "remove"}, fetch = "EAGER")
      */
-    private Role $role;
+    private $role;
 
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->role = new ArrayCollection();
     }
 
     /**
      * Method for get all post of user
-     * @return ArrayCollection
+     * @return array
      */
-    public function getPosts() : ArrayCollection
+    public function getPosts() : array
     {
-        return $this->posts;
+        return $this->posts->toArray();
     }
 
     /**
@@ -140,7 +141,7 @@ class User implements Authenticatable, CanResetPasswordContract
      * Method for get name of user
      * @return string
      */
-    public function getName() : string
+    public function getName() : ?string
     {
         return $this->name;
     }
@@ -158,7 +159,7 @@ class User implements Authenticatable, CanResetPasswordContract
      * Method for get lastname of user
      * @return string
      */
-    public function getLastname() : string
+    public function getLastname() : ?string
     {
         return $this->lastname;
     }
@@ -180,7 +181,7 @@ class User implements Authenticatable, CanResetPasswordContract
 
     public function setRole(Role $role)
     {
-        $this->roles = $role;
+        $this->role->add($role);
     }
 
     public function getUpdatedAt()

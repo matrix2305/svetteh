@@ -3,9 +3,11 @@
 
 namespace AppCore\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\Version;
+use Illuminate\Support\Arr;
 
 /**
  * @ORM\Entity
@@ -27,7 +29,7 @@ class Role
     /**
      * @ORM\Column(name="color", type="string")
      */
-    private string $roleColor;
+    private string $color;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -40,6 +42,22 @@ class Role
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="role", cascade={"persist", "remove"}, fetch="LAZY")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Permissions", inversedBy="role", cascade={"persist"}, fetch="EAGER")
+     */
+    private $permissions;
+
+
+    public function __construct()
+    {
+        $this->permissions = new ArrayCollection();
+        $this->user = new ArrayCollection();
+    }
 
     /**
      * Method for get id of role
@@ -75,26 +93,33 @@ class Role
      */
     public function getRoleColor() : string
     {
-        return $this->roleColor;
+        return $this->color;
     }
 
     /**
      * Method for set role color
-     * @param string $roleColor
+     * @param string $color
      */
-    public function setRoleColor(string $roleColor) : void
+    public function setRoleColor(string $color) : void
     {
-        $this->roleColor = $roleColor;
+        $this->color = $color;
     }
 
-    public function getUpdatedAt()
+    /**
+     * Method for get permissions for role
+     * @return array
+     */
+    public function getPermissions() : array
     {
-        return $this->updatedAt;
+        return $this->permissions->toArray();
     }
 
-    public function getCreatedAt()
+    /**
+     * Method for set permissions
+     * @param ArrayCollection $collection
+     */
+    public function setPermissions(Permissions $permissions) : void
     {
-        return $this->createdAt;
+        $this->permissions->add($permissions);
     }
-
 }

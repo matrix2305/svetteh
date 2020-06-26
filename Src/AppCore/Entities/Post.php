@@ -54,9 +54,14 @@ class Post
     private User $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity = "Category", inversedBy = "posts", cascade = { "persist", "remove" }, fetch = "EAGER")
+     * @ORM\ManyToMany(targetEntity = "Category", inversedBy = "post", cascade = { "persist", "remove" }, fetch = "EAGER")
      */
-    private ArrayCollection $categories;
+    private $categories;
+
+    /**
+     * @ORM\OneToMany(targetEntity = "Comment", mappedBy="post", cascade = {"persist", "remove"}, fetch = "EAGER")
+     */
+    private $comments;
 
     public function __construct()
     {
@@ -147,11 +152,11 @@ class Post
 
     /**
      * Method for get all categories of post
-     * @return ArrayCollection
+     * @return array
      */
-    public function getCategories() : ArrayCollection
+    public function getCategories() : array
     {
-        return $this->categories;
+        return $this->categories->toArray();
     }
 
     /**
@@ -161,5 +166,15 @@ class Post
     public function setCategories(Category $category) : void
     {
         $this->categories->add($category);
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

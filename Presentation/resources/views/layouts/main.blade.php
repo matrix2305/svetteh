@@ -12,7 +12,7 @@
     <header>
         <div class="hcontent">
             <div class="logo">
-                <img src="img/logo.png">
+                <img src="/img/logo.png">
             </div>
             @if (session('status'))
                 <div class="user-info" role="alert">
@@ -24,7 +24,7 @@
                     <li><a id="{{(request()->path() == '/')? 'active':''}}" href="/">Početna</a></li>
                     @if (Route::has('login'))
                         @auth
-                            <li><a id="{{(request()->path() == 'dashboard')? 'active':''}}" href="{{ url('/dashboard') }}">Panel</a></li>
+                            <li><a id="{{($path = explode('/',request()->path())[0] == 'dashboard')? 'active':''}}" href="{{ url('/dashboard') }}">Panel</a></li>
                             <li onclick="document.getElementById('logout-form').submit();"><a>Odjavi se</a></li>
                             <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none">
                                 @csrf

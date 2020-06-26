@@ -14,4 +14,7 @@ interface IUsersService
 
     public function deleteUser($id);
 
+    public function login(string $username);
+
+    public function register(string $username);
 }

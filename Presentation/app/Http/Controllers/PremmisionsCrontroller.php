@@ -2,19 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use AppCore\Interfaces\ICategoriesService;
 use Illuminate\Http\Request;
-use Exception;
 
-class CategoryController extends Controller
+class PremmisionsCrontroller extends Controller
 {
-    private ICategoriesService $categoriesService;
-
-    public function __construct(ICategoriesService $categoriesService)
-    {
-        $this->categoriesService = $categoriesService;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('categories');
+        //
     }
 
     /**
@@ -32,7 +23,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categoryadd');
+        //
     }
 
     /**
@@ -43,22 +34,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'category_name' => 'required',
-                'category_color' => 'required'
-            ]
-        );
+        //
+    }
 
-        try {
-            $this->categoriesService->addCategory([
-                'category_name' => $request->input('category_name'),
-                'category_color' => $request->input('category_color')
-            ]);
-            return redirect()->route('addcategory')->with('success', 'Uspešno dodavanje!');
-        }catch (Exception $exception){
-            return redirect()->route('addcategory')->with('error', 'Kategorija već postoji!');
-        }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -69,7 +56,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        return view('categories.edit');
+        //
     }
 
     /**

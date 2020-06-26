@@ -15,7 +15,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'PortalController@index')->name('index');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::middleware('auth')->prefix('dashboard')->group(function (){
+    Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::prefix('/category')->group(function (){
+        Route::get('/create', 'CategoryController@create')->name('addcategory');
+        Route::put('/add', 'CategoryController@store')->name('storecategory');
+    });
+    Route::prefix('/user')->group(function (){
+        Route::get('/add', 'UsersController@index')->name('createuser');
+        Route::put('/store', 'UsersController@store')->name('storeuser');
+    });
+});
+
 
