@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use AppCore\Interfaces\IUsersService;
+use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,8 +55,8 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $login = $this->UsersService->login($request->input('username'));
-        if(!empty($login)){
+        try {
+            $this->UsersService->login($request->input('username'));
             $login_type = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
             $request->merge([
                 $login_type => $request->input('username'),
@@ -69,7 +70,7 @@ class LoginController extends Controller
                 return redirect()->route('login')
                     ->with('error','Niste uneli ispravnu lozinku!');
             }
-        }else{
+        }catch (Exception $exception){
             return redirect()->route('login')
                 ->with('error','Korisnik sa ovim korisničkim imenom ne postoji!');
         }
