@@ -24,7 +24,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-        //
+        $posts = $this->postsService->getAllPosts();
+        return view('posts', ['posts' => $posts]);
     }
 
     /**
@@ -46,28 +47,21 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $request->validate(
             [
-                'title' => 'required|max:255',
-                'text' => 'required',
+                'title' => 'required|string|max:255',
+                'text' => 'required|string',
                 'image' => 'required|image|mimes:jpeg,jpg,png,giff,svg,bmp|max:4096'
             ]
         );
-        $cinput = array_diff($request->all(), ['_token', '_method', 'title', 'text', 'image']);
-        dd($cinput);
-        $categories = array();
-        for($i = 0; $i<count($cinput); $i++){
-            if(!empty($cinput[$i])){
-                $categories[] = [
-                    'id' => $cinput[$i]
-                ];
-            }
-        }
-        $user_id = Auth::user()->getId();
 
-        $image_name = time().'.'.$request->image->extension();
+        $user_id = Auth::user()->getId();
+        $data = $request->all();
+        unset($data['_token'], $data['_method'], $data['title'], $data['text'], $data['image']);
+
         try {
+            $categories = array_values($data);
+            $image_name = time().'.'.$request->image->extension();
             $request->image->move(public_path('images/posts'), $image_name);
             $this->postsService->addPost([
                 'title' => $request->input('title'),
@@ -76,23 +70,14 @@ class PostsController extends Controller
                 'categories' => $categories,
                 'user_id' => $user_id,
             ]);
-            return redirect()->route('createposts')->with('error', 'Uspešno dodat post!');
+            return redirect()->route('createposts')->with('succes', 'Uspešno dodat post!');
         }catch (Exception $exception){
             unlink(public_path('images/posts'.$image_name));
             return redirect()->back()->with('error', 'Greška pri dodavanju!');
         }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -123,8 +108,13 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'id' => 'required|integer'
+        ]);
+        $id = $request->input('id');
+        $this->postsService->deletePost(intval($id));
+        return redirect()->route('posts')->with('deleted', 'Uspešno obrisana objava!');
     }
 }

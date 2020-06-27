@@ -36,12 +36,12 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => ['required', 'string', 'max:30'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'name' => ['string', 'max:255'],
-            'lastname' => ['string', 'max:255'],
-            'role' => ['required']
+            'username' => 'required|string|max:30',
+            'email' => 'required|string|email|max:70',
+            'password' => 'required|string|min:8|confirmed',
+            'name' => 'string|max:50',
+            'lastname' => 'string|max:50',
+            'role' => 'required'
         ]);
         $data = $request->all();
         $user = $this->usersService->register($data['username']);

@@ -28,5 +28,58 @@ class InitSeed extends Seeder
                 'created_at' => Carbon::now()
             ]
         );
+
+        DB::table('permissions')->insert(
+            [
+                [
+                    'permission' => 'users.create',
+                    'name' => 'Dodavanje korisnika'
+                ],
+                [
+                    'permission' => 'users.edit',
+                    'name' => 'Izmena korisnika'
+                ],
+                [
+                    'permission' => 'users.delete',
+                    'name' => 'Brisanje korisnika'
+                ],
+                [
+                    'permission' => 'posts.create',
+                    'name' => 'Dodavanje objava'
+                ],
+                [
+                    'permission' => 'posts.edit',
+                    'name' => 'Izmena objava'
+                ],
+                [
+                    'permission' => 'posts.delete',
+                    'name' => 'Brisanje objava'
+                ],
+                [
+                    'permission' => 'roles.create',
+                    'name' => 'Dodavanje učešća'
+                ],
+                [
+                    'permission' => 'roles.edit',
+                    'name' => 'Izmena ućešća'
+                ],
+                [
+                    'permission' => 'roles.delete',
+                    'name' => 'Brisanje brisanje'
+                ],
+                [
+                    'permission' => 'category.create',
+                    'name' => 'Dodavanje kategorije'
+                ],
+                [
+                    'permission' => 'category.edit',
+                    'name' => 'Izmena kategorije'
+                ],
+                [
+                    'permission' => 'category.delete',
+                    'name' => 'Brisanje kategorije'
+                ],
+            ]
+        );
     }
 }

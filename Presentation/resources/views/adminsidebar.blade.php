@@ -10,7 +10,7 @@
         Objave
     </div>
     <ul>
-        <li><a id="{{(request()->path() == '')? 'active':''}}" href="{{route('roles')}}">Objave</a></li>
+        <li><a id="{{(request()->path() == '')? 'active':''}}" href="{{route('posts')}}">Objave</a></li>
         <li><a id="{{(request()->path() == '')? 'active':''}}" href="{{route('createposts')}}">Dodaj objavu</a></li>
         <li><a id="{{(request()->path() == route('categories'))? 'active':''}}" href="{{route('categories')}}">Kategorije</a></li>
     </ul>

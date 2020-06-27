@@ -3,12 +3,14 @@ declare(strict_types = 1);
 namespace AppCore\Services;
 
 use AppCore\DTO\CategoryDTO;
+use AppCore\DTO\PostsDTO;
 use AppCore\Entities\Category;
 use AppCore\Entities\Post;
 use AppCore\Interfaces\IPostsService;
 use AppCore\Interfaces\IPostsRepository;
 use AppCore\Interfaces\ILog;
 use AppCore\Interfaces\IUsersRepository;
+use Exception;
 
 class PostsService implements IPostsService
 {
@@ -29,28 +31,35 @@ class PostsService implements IPostsService
 
     public function getAllPosts() : array
     {
-        return $this->postsRepository->getAllPosts();
+        $posts = $this->postsRepository->getAllPosts();
+        return PostsDTO::fromCollection($posts);
     }
 
-    public function findOnePost(int $id) // Fix DTO
+    public function findOnePost(int $id) : PostsDTO
     {
         $post = $this->postsRepository->getOnePosts($id);
+        return PostsDTO::fromEntity($post);
     }
 
     public function addPost(array $data)
     {
-        $user = $this->usersRepository->getOneUser(intval($data['user_id']));
-        $post = new Post();
-        $post->setTitle($data['tittle']);
-        $post->setText($data['text']);
-        $post->setImgPath($data['image']);
-        $categories = $data['categories'];
-        $post->setUser($user);
-        for($i=0; $i<count($categories); $i++){
-            $entity = $this->postsRepository->getOneCategory($categories[$i]);
-            $post->setCategories($entity);
+        try {
+            $user = $this->usersRepository->getOneUser(intval($data['user_id']));
+            $post = new Post();
+            $post->setTitle($data['title']);
+            $post->setText($data['text']);
+            $post->setImgPath($data['image']);
+            $categories = $data['categories'];
+            $post->setUser($user);
+            for($i=0; $i<count($categories); $i++){
+                $entity = $this->postsRepository->getOneCategory(intval($categories[$i]));
+                $post->setCategories($entity);
+            }
+            $this->postsRepository->addPost($post);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
         }
-        $this->postsRepository->addPost($post);
     }
 
     public function updatePost(array $data)
@@ -60,7 +69,12 @@ class PostsService implements IPostsService
 
     public function deletePost(int $id)
     {
-        // TODO: Implement deletePost() method.
+        try {
+            $this->postsRepository->deletePost($id);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
     }
 
     public function getAllCategories() : array
@@ -71,15 +85,25 @@ class PostsService implements IPostsService
 
     public function addCategory(array $data)
     {
-        $entity  = new Category();
-        $entity->setCategoryName($data['category_name']);
-        $entity->setCategoryColor($data['category_color']);
-        $this->postsRepository->addCategory($entity);
+        try {
+            $entity  = new Category();
+            $entity->setCategoryName($data['category_name']);
+            $entity->setCategoryColor($data['category_color']);
+            $this->postsRepository->addCategory($entity);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
     }
 
     public function deleteCategory(int $id)
     {
-        $this->postsRepository->deleteCategory($id);
+        try {
+            $this->postsRepository->deleteCategory($id);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
     }
 
 }

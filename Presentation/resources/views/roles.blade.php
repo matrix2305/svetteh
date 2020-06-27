@@ -39,7 +39,13 @@
                                     @endif
                                 @endforeach
                             </td>
-                            <td><a href=""><i style="color: black" class="fas fa-edit"></i></a></td>
+                            <td>
+                                @if($loop == $loop->first)
+                                    <i style="color: black" class="fas fa-edit"></i>
+                                @else
+                                    <a href="{{route('editroles', $role->id)}}"><i style="color: black" class="fas fa-edit"></i></a>
+                                @endif
+                            </td>
                             <td><i onclick="{{($loop == $loop->first)? '' : "document.getElementById('deleteRole".$loop->index."').submit();"}}" class="fas fa-user-minus"></i></td>
                             <form id="{{($loop == $loop->first)? '' : 'deleteRole'.$loop->index}}" action="{{route('destroyroles')}}" method="POST" style="display: none">
                                 @csrf

@@ -30,7 +30,7 @@
                             <td style="background-color: {{$category->color}}">{{$category->color}}</td>
                             <td><a href=""><i style="color: black" class="fas fa-edit"></i></a></td>
                             <td><i onclick="document.getElementById('deleteCategory{{$loop->index}}').submit();" class="fas fa-user-minus"></i></td>
-                            <form id="deleteCategory{{$loop->index}}" action="{{route('destroycategory')}}" method="POST" style="display: none">
+                            <form id="deleteCategory'{{$loop->index}}" action="{{route('destroycategory')}}" method="POST" style="display: none">
                                 @csrf
                                 @method('delete')
                                 <input type="hidden" name="id" value="{{$category->id}}">

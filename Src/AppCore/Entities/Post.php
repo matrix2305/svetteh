@@ -35,7 +35,7 @@ class Post
     private DateTime $updatedAt;
 
     /**
-     * @ORM\Column(name="title", type="string")
+     * @ORM\Column(name="title", type="string", length = 255)
      */
     private string $title;
 
@@ -45,17 +45,17 @@ class Post
     private string $text;
 
     /**
-     * @ORM\Column(name="image_path", type="string")
+     * @ORM\Column(name="image_path", type="string", length = 50)
      */
     private string $imgPath;
 
     /**
-     * @ORM\Column(name="name", type="string", nullable=true)
+     * @ORM\Column(name="name", type="string", nullable=true, length = 50)
      */
     private ?string $name;
 
     /**
-     * @ORM\Column(name="lastname", type="string", nullable=true)
+     * @ORM\Column(name="lastname", type="string", nullable=true, length = 70)
      */
     private ?string $lastname;
 
@@ -76,7 +76,6 @@ class Post
 
     public function __construct()
     {
-        $this->user = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
@@ -102,7 +101,7 @@ class Post
 
     /**
      * Method for set tittle post
-     * @param string $tittle
+     * @param string $title
      */
     public function setTitle(string $title): void
     {
@@ -160,7 +159,7 @@ class Post
      */
     public function setUser(User $user): void
     {
-        $this->user->add($user);
+        $this->user = $user;
         $this->name = $user->getName();
         $this->lastname = $user->getLastname();
     }

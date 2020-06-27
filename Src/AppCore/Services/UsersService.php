@@ -6,12 +6,12 @@ namespace AppCore\Services;
 use AppCore\DTO\PermissionsDTO;
 use AppCore\DTO\RoleDTO;
 use AppCore\DTO\UsersDTO;
-use AppCore\Entities\Permissions;
 use AppCore\Entities\Role;
 use AppCore\Entities\User;
 use AppCore\Interfaces\IUsersService;
 use AppCore\Interfaces\ILog;
 use AppCore\Interfaces\IUsersRepository;
+use Exception;
 
 class UsersService implements IUsersService
 {
@@ -38,45 +38,58 @@ class UsersService implements IUsersService
 
     public function addUser(array $data)
     {
-        $role = $this->UsersRepository->getOneRole(intval($data['role_id']));
-        $user = new User();
-        $user->setUsername($data['username']);
-        $user->setEmail($data['email']);
-        $user->setPassword($data['password']);
-        $user->setName($data['name']);
-        $user->setLastname($data['lastname']);
-        $user->setRole($role);
-        $this->UsersRepository->AddUser($user);
-    }
-
-    public function updateUser(array $data) : void
-    {
-        $this->UsersRepository->updateUser($data);
-    }
-
-    public function deleteUser(int $id) : void
-    {
-        $this->UsersRepository->deleteUser($id);
-    }
-
-    public function login(string $username) : ?UsersDTO
-    {
-        $user =  $this->UsersRepository->getUserByEmailorUsername($username);
-        if(!empty($user)){
-            return UsersDTO::fromEntity($user);
-        }else{
-            return null;
+        try {
+            $role = $this->UsersRepository->getOneRole(intval($data['role_id']));
+            $user = new User();
+            $user->setUsername($data['username']);
+            $user->setEmail($data['email']);
+            $user->setPassword($data['password']);
+            $user->setName($data['name']);
+            $user->setLastname($data['lastname']);
+            $user->setRole($role);
+            $this->UsersRepository->AddUser($user);
+        }catch (Exception $exception){
+            $this->Log->AddLog($exception->getMessage());
+            return $exception->getMessage();
         }
     }
 
-    public function register(string $username) : ?UsersDTO
+    public function updateUser(array $data)
+    {
+        try {
+            $this->UsersRepository->updateUser($data);
+        }catch (Exception $exception){
+            $this->Log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
+    public function deleteUser(int $id)
+    {
+        try {
+            $this->UsersRepository->deleteUser($id);
+        }catch (Exception $exception){
+            $this->Log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
+    public function login(string $username) : UsersDTO
     {
         $user =  $this->UsersRepository->getUserByEmailorUsername($username);
-        if(!empty($user)){
-            return UsersDTO::fromEntity($user);
-        }else{
-            return null;
-        }
+        return UsersDTO::fromEntity($user);
+    }
+
+    public function register(string $username) : UsersDTO
+    {
+        $user =  $this->UsersRepository->getUserByEmailorUsername($username);
+        return UsersDTO::fromEntity($user);
+    }
+
+    public function findRoleById(int $id) : RoleDTO
+    {
+        $role = $this->UsersRepository->getOneRole($id);
+        return RoleDTO::fromEntity($role);
     }
 
     public function getAllRoles() : array
@@ -85,27 +98,30 @@ class UsersService implements IUsersService
         return RoleDTO::fromCollection($roles);
     }
 
-    public function findRoleByName(string $name) : ?RoleDTO
+    public function findRoleByName(string $name) : RoleDTO
     {
         $role = $this->UsersRepository->getRoleByName($name);
-        if(!empty($role)){
-            return RoleDTO::fromEntity($role);
-        }else{
-            return null;
-        }
+        return RoleDTO::fromEntity($role);
     }
 
-    public function addRole(array $data) : void
+    public function addRole(array $data)
     {
-        $role = new Role();
-        $role->setName($data['name']);
-        $role->setRoleColor($data['color']);
-        $permissions = $data['permissions'];
-        foreach ($permissions as $input){
-            $entity = $this->UsersRepository->getOnePermission(intval($input['id']));
-            $role->setPermissions($entity);
+        try {
+            $role = new Role();
+            $role->setName($data['name']);
+            $role->setRoleColor($data['color']);
+            $permissions = $data['permissions'];
+            for ($i = 0; $i<count($permissions); $i++){
+                if(!empty($permissions)){
+                    $entity = $this->UsersRepository->getOnePermission(intval($permissions[$i]));
+                    $role->setPermissions($entity);
+                }
+            }
+            $this->UsersRepository->addRole($role);
+        }catch (Exception $exception){
+            $this->Log->AddLog($exception->getMessage());
+            return $exception->getMessage();
         }
-        $this->UsersRepository->addRole($role);
     }
 
     public function getAllPermissions() : array
@@ -114,9 +130,14 @@ class UsersService implements IUsersService
         return PermissionsDTO::fromCollection($permissions);
     }
 
-    public function deleteRole(int $id) : void
+    public function deleteRole(int $id)
     {
-        $this->UsersRepository->deleteRole($id);
+        try {
+            $this->UsersRepository->deleteRole($id);
+        }catch (Exception $exception){
+            $this->Log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
     }
 
 }

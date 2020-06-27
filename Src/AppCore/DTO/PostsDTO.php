@@ -7,19 +7,27 @@ use AppCore\Entities\Post;
 class PostsDTO extends BaseDTO
 {
     public int $id;
-    public string $tittle;
+    public string $title;
     public string $text;
     public string $image_path;
-    public UsersDTO $user;
+    public ?string $name;
+    public ?string $lastname;
+    public string $createdAt;
+    public string $updatedAt;
+    public array $categories;
 
     public static function fromEntity(Post $post){
         return new self(
             [
                 'id' => $post->getId(),
-                'tittle' => $post->getTittle(),
+                'title' => $post->getTitle(),
                 'text' => $post->getText(),
                 'image_path' => $post->getImgPath(),
-                'author' => UsersDTO::fromEntity($post->getUser())
+                'name' => $post->getName(),
+                'lastname' => $post->getLastname(),
+                'createdAt' => $post->getCreatedAt()->format('d/m/Y  H:i:s'),
+                'updatedAt' => $post->getUpdatedAt()->format('d/m/Y  H:i:s'),
+                'categories' => CategoryDTO::fromCollection($post->getCategories()),
             ]
         );
     }
@@ -29,7 +37,7 @@ class PostsDTO extends BaseDTO
         if(!empty($posts)){
             foreach ($posts as $post){
                 if($post instanceof Post){
-                    $postsCollection[] = $post;
+                    $postsCollection[] = self::fromEntity($post);
                 }
             }
         }

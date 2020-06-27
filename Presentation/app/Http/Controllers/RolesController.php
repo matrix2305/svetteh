@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use AppCore\Interfaces\IUsersService;
 use Illuminate\Http\Request;
+use Exception;
 
 class RolesController extends Controller
 {
@@ -45,31 +46,22 @@ class RolesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'rolename' => 'required'
+            'rolename' => 'required|string|max:50'
+
         ]);
         $data = $request->all();
-        $check = $this->usersService->findRoleByName($data['rolename']);
-        if(empty($check)){
-            $inputp = array_diff($data, ['_token', '_method', 'rolename', 'rolecolor']);
-            $permissions = array();
-            for($i = 0; $i<count($inputp); $i++){
-
-                if(!empty($inputp['permission'.$i])){
-                    $permissions[] = array(
-                        'id' => $inputp['permission'.$i]
-                    );
-                }
-            }
+        unset($data['_token'], $data['rolename'],$data['rolecolor'], $data['_method']);
+        try{
+            $permissions = array_values($data);
             $this->usersService->addRole([
-                'name' => $data['rolename'],
-                'color' => $data['rolecolor'],
+                'name' => $request->input('rolename'),
+                'color' => $request->input('rolecolor'),
                 'permissions' => $permissions
             ]);
             return redirect()->route('roles')->with('success', 'Uspešno dodavanje role!');
-        }else{
+        }catch (Exception $exception){
             return redirect()->route('roles')->with('error', 'Učešće sa ovim imenom već postoji!');
         }
-
     }
 
     /**
@@ -80,7 +72,9 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $role = $this->usersService->findRoleById(intval($id));
+        dd($role);
+        return view('editrole', ['role' => $role]);
     }
 
     /**
@@ -104,9 +98,10 @@ class RolesController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'id' => 'required'
+            'id' => 'required|integer'
         ]);
-        $this->usersService->deleteRole($request->input('id'));
+        $id = $request->input('id');
+        $this->usersService->deleteRole(intval($id));
         return redirect()->route('roles')->with('deleted', 'Uspešno obrisano učešće!');
     }
 }
