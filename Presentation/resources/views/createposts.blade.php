@@ -21,7 +21,7 @@
                         <p>{{$message}}</p>
                     </div>
                 @endif
-                <form  method="POST" action="{{ route('storeroles') }}">
+                <form  method="POST" action="{{ route('storeposts') }}">
                     @csrf
                     @method('put')
                     <label>Naziv objave</label>
