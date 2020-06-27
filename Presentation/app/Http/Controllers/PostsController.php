@@ -49,12 +49,13 @@ class PostsController extends Controller
         dd($request->all());
         $request->validate(
             [
-                'title' => ['required', 'max:255'],
-                'text' => ['required'],
-                'image' => ['required', 'image', 'mimes:jpeg,jpg,png,giff,svg,bmp', 'max:4096']
+                'title' => 'required|max:255',
+                'text' => 'required',
+                'image' => 'required|image|mimes:jpeg,jpg,png,giff,svg,bmp|max:4096'
             ]
         );
-        $cinput = array_diff($request->all(), ['__token', 'title', 'text', 'image']);
+        $cinput = array_diff($request->all(), ['_token', '_method', 'title', 'text', 'image']);
+        dd($cinput);
         $categories = array();
         for($i = 0; $i<count($cinput); $i++){
             if(!empty($cinput[$i])){

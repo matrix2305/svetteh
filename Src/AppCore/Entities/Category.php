@@ -17,7 +17,7 @@ class Category
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private int $id;
