@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\Version;
+use DateTime;
 
 /**
  * @ORM\Entity()
@@ -42,7 +43,7 @@ class Category
     private string $categoryColor;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Post", mappedBy="categories", cascade={ "persist", "remove" }, fetch ="LAZY")
+     * @ORM\ManyToMany(targetEntity="Post", mappedBy="categories", fetch ="LAZY")
      */
     private $posts;
 
@@ -100,12 +101,12 @@ class Category
      * Method for get last updated time category
      * @return string
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt() : DateTime
     {
         return $this->updatedAt;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt() : DateTime
     {
         return $this->createdAt;
     }

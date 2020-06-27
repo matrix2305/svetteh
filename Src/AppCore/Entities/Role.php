@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\Version;
-use Illuminate\Support\Arr;
+use DateTime;
 
 /**
  * @ORM\Entity
@@ -22,7 +22,7 @@ class Role
      */
     private int $id;
     /**
-     * @ORM\Column(name="role", type="string")
+     * @ORM\Column(name="role", type="string", unique=true)
      */
     private string $role;
 
@@ -32,18 +32,7 @@ class Role
     private string $color;
 
     /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @Version @ORM\Column(name="updated_at", type="datetime")
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="role", cascade={"persist", "remove"}, fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="role", cascade={"remove"}, fetch="LAZY")
      */
     private $user;
 
@@ -116,7 +105,7 @@ class Role
 
     /**
      * Method for set permissions
-     * @param ArrayCollection $collection
+     * @param Permissions $permissions
      */
     public function setPermissions(Permissions $permissions) : void
     {

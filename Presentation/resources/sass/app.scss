@@ -54,9 +54,6 @@ body{
     justify-content: center;
 }
 
-.navbar ul li{
-
-}
 
 .navbar ul li a{
     color: black;
@@ -202,7 +199,20 @@ input[type=text], input[type=email], input[type=password], select, textarea {
     resize: vertical;
 }
 
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
 
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
 
 input[type=submit], button{
     background-color: $footer_color;

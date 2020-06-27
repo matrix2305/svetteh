@@ -10,7 +10,7 @@ class RoleDTO extends BaseDTO
     public int $id;
     public string $name;
     public string $color;
-    public $permissions;
+    public array $permissions;
 
     public static function fromEntity(Role $role){
         return new self(
@@ -28,7 +28,7 @@ class RoleDTO extends BaseDTO
         if(!empty($roles)){
             foreach ($roles as $role){
                 if($role instanceof Role){
-                    $roleCollection[] = $role;
+                    $roleCollection[] = self::fromEntity($role);
                 }
             }
         }

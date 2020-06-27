@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Infrastructure\Repository;
 
+use AppCore\Entities\Category;
 use AppCore\Entities\Post;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\LockMode;
@@ -9,9 +10,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use AppCore\Interfaces\ILog;
-use AppCore\Interfaces\IPostRepository;
+use AppCore\Interfaces\IPostsRepository;
 
-class PostsRepository implements IPostRepository
+class PostsRepository implements IPostsRepository
 {
     /**
      * @var EntityManager|EntityManagerInterface
@@ -28,11 +29,14 @@ class PostsRepository implements IPostRepository
      */
     private $post;
 
+    private $category;
+
     public function __construct(EntityManagerInterface $em, ILog $log)
     {
         $this->em = $em;
         $this->log = $log;
         $this->post = Post::class;
+        $this->category = Category::class;
     }
 
     /**
@@ -48,9 +52,6 @@ class PostsRepository implements IPostRepository
      * Method for get one post
      * @param int $id
      * @return Post
-     * @throws OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getOnePosts(int $id) : Post
     {
@@ -154,7 +155,7 @@ class PostsRepository implements IPostRepository
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addCategory(Category $category) : ?string
+    public function addCategory(Category $category)
     {
         $this->em->getConnection()->beginTransaction();
         try {
@@ -195,11 +196,12 @@ class PostsRepository implements IPostRepository
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function deleteCategory(Category $category) : ?string
+    public function deleteCategory(int $id)
     {
         $this->em->getConnection()->beginTransaction();
         try {
-            $this->em->remove($category);
+            $entity = $this->em->find($this->category, $id);
+            $this->em->remove($entity);
             $this->em->flush();
             $this->em->getConnection()->commit();
         }catch (ConnectionException $exception){

@@ -5,7 +5,7 @@ namespace AppCore\Interfaces;
 use AppCore\Entities\Post;
 use AppCore\Entities\Category;
 
-interface IPostRepository
+interface IPostsRepository
 {
     public function getAllPosts();
 
@@ -25,5 +25,5 @@ interface IPostRepository
 
     public function updateCategory(array $data);
 
-    public function deleteCategory(Category $category);
+    public function deleteCategory(int $id);
 }

@@ -31,9 +31,13 @@ interface IUsersRepository
 
     public function getOneRole(int $id);
 
+    public function getRoleByName(string $name);
+
     public function addRole(Role $role);
 
     public function updateRole(array $data);
 
     public function deleteRole(int $id);
+
+    public function getOnePermission(int $id);
 }

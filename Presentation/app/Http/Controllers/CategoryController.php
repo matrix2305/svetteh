@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use AppCore\Interfaces\ICategoriesService;
+use AppCore\Interfaces\IPostsService;
 use Illuminate\Http\Request;
 use Exception;
 
 class CategoryController extends Controller
 {
-    private ICategoriesService $categoriesService;
+    private IPostsService $postsService;
 
-    public function __construct(ICategoriesService $categoriesService)
+    public function __construct(IPostsService $postsService)
     {
-        $this->categoriesService = $categoriesService;
+        $this->postsService = $postsService;
     }
 
     /**
@@ -22,18 +22,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('categories');
+        $categories = $this->postsService->getAllCategories();
+        return view('categories', ['categories' => $categories]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('categoryadd');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -51,13 +43,13 @@ class CategoryController extends Controller
         );
 
         try {
-            $this->categoriesService->addCategory([
+            $this->postsService->addCategory([
                 'category_name' => $request->input('category_name'),
                 'category_color' => $request->input('category_color')
             ]);
-            return redirect()->route('addcategory')->with('success', 'Uspešno dodavanje!');
+            return redirect()->route('categories')->with('success', 'Uspešno dodavanje!');
         }catch (Exception $exception){
-            return redirect()->route('addcategory')->with('error', 'Kategorija već postoji!');
+            return redirect()->route('categories')->with('error', 'Kategorija već postoji!');
         }
     }
 
@@ -90,8 +82,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'id' => 'required'
+            ]
+        );
+
+        $this->postsService->deleteCategory($request->input('id'));
+        return redirect()->route('categories')->with('deleted', 'Uspešno obrisana kategorija!');
     }
 }

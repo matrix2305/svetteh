@@ -23,7 +23,8 @@ class UsersController extends Controller
     public function index()
     {
         $users = $this->usersService->getAllUsers();
-        return view('adduser');
+        $roles = $this->usersService->getAllRoles();
+        return view('users', ['users' => $users, 'roles' =>  $roles]);
     }
 
     /**
@@ -39,10 +40,10 @@ class UsersController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'name' => ['string', 'max:255'],
-            'lastname' => ['string', 'max:255']
+            'lastname' => ['string', 'max:255'],
+            'role' => ['required']
         ]);
         $data = $request->all();
-
         $user = $this->usersService->register($data['username']);
 
         if(empty($user)){
@@ -51,24 +52,14 @@ class UsersController extends Controller
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'name' => (!empty($data['name']))? $data['name'] : null,
-                'lastname' => (!empty($data['lastname']))? $data['lastname'] : null
+                'lastname' => (!empty($data['lastname']))? $data['lastname'] : null,
+                'role_id' => $data['role']
             ]);
 
-            return redirect()->route('createuser')->with('success', 'Uspešno dodat korisnik!');
+            return redirect()->route('users')->with('success', 'Uspešno dodat korisnik!');
         }else{
-            return redirect()->route('createuser')->with('error', 'Korisnik sa ovim korisničkim imenom ili e-poštom već postoji!');
+            return redirect()->route('users')->with('error', 'Korisnik sa ovim korisničkim imenom ili e-poštom već postoji!');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -100,8 +91,15 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+       $request->validate(
+           [
+               'id' => 'required'
+           ]
+       );
+
+       $this->usersService->deleteUser($request->input('id'));
+       return redirect()->route('users')->with('deleted', 'Uspešno obrisan korisnik!');
     }
 }

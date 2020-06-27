@@ -9,33 +9,28 @@ use AppCore\Entities\Category;
 class CategoryDTO extends BaseDTO
 {
     public int $id;
-    public string $createdAt;
-    public string $updatedAt;
-    public string $categoryName;
-    public string $categoryColor;
+    public string $name;
+    public string $color;
 
     public static function fromEntity(Category $category){
-        new self(
+        return new self(
             [
                 'id' => $category->getId(),
-                'categoryName' => $category->getCategoryName(),
-                'categoryColor' => $category->getCategoryColor(),
-                'createdAt' => $category->getCreatedAt(),
-                'updatedAt' => $category->getUpdatedAt()
+                'name' => $category->getCategoryName(),
+                'color' => $category->getCategoryColor()
             ]
         );
     }
 
     public static function fromCollection(array $categories){
         $categoryCollection = array();
-        if(!empty($posts)){
+        if(!empty($categories)){
             foreach ($categories as $category){
                 if($category instanceof Category){
                     $categoryCollection[] = self::fromEntity($category);
                 }
             }
         }
-
         return $categoryCollection;
     }
 

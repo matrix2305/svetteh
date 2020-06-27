@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\Version;
+use DateTime;
 
 /**
  * Class Post
@@ -26,17 +27,17 @@ class Post
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
      */
-    private string $createdAt;
+    private DateTime $createdAt;
 
     /**
      * @Version @ORM\Column(name="updated_at", type="datetime")
      */
-    private string $updatedAt;
+    private DateTime $updatedAt;
 
     /**
-     * @ORM\Column(name="tittle", type="string")
+     * @ORM\Column(name="title", type="string")
      */
-    private string $tittle;
+    private string $title;
 
     /**
      * @ORM\Column(name="text", type="text")
@@ -49,30 +50,42 @@ class Post
     private string $imgPath;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="post", cascade={"persist", "remove"}, fetch="EAGER")
+     * @ORM\Column(name="name", type="string", nullable=true)
      */
-    private User $user;
+    private ?string $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity = "Category", inversedBy = "post", cascade = { "persist", "remove" }, fetch = "EAGER")
+     * @ORM\Column(name="lastname", type="string", nullable=true)
+     */
+    private ?string $lastname;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="post", cascade={"persist"}, fetch="LAZY")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToMany(targetEntity = "Category", inversedBy = "post", cascade = {"persist"}, fetch = "EAGER")
      */
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity = "Comment", mappedBy="post", cascade = {"persist", "remove"}, fetch = "EAGER")
+     * @ORM\OneToMany(targetEntity = "Comment", mappedBy="post", cascade = {"remove"}, fetch = "EAGER")
      */
     private $comments;
 
     public function __construct()
     {
+        $this->user = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     /**
      * Method for get Post id
      * @return int
      */
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -81,9 +94,9 @@ class Post
      * Method for get tittle post
      * @return string
      */
-    public function getTittle() : string
+    public function getTitle(): string
     {
-        return $this->tittle;
+        return $this->title;
     }
 
 
@@ -91,16 +104,16 @@ class Post
      * Method for set tittle post
      * @param string $tittle
      */
-    public function setTittle(string $tittle) : void
+    public function setTitle(string $title): void
     {
-        $this->tittle = $tittle;
+        $this->title = $title;
     }
 
     /**
      * Method for get description(text) of post
      * @return string
      */
-    public function getText() : string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -109,7 +122,7 @@ class Post
      * Method for get description(text) of post
      * @param string $text
      */
-    public function setText(string $text) : void
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -118,7 +131,7 @@ class Post
      * Method for get image path of post
      * @return string
      */
-    public function getImgPath() : string
+    public function getImgPath(): string
     {
         return $this->imgPath;
     }
@@ -127,7 +140,7 @@ class Post
      * Method for set image path for post
      * @param string $img_path
      */
-    public function setImgPath(string $imgPath) : void
+    public function setImgPath(string $imgPath): void
     {
         $this->imgPath = $imgPath;
     }
@@ -145,16 +158,18 @@ class Post
      * Method for set author user of Post
      * @param User $user
      */
-    public function setUser(User $user) : void
+    public function setUser(User $user): void
     {
-        $this->user = $user;
+        $this->user->add($user);
+        $this->name = $user->getName();
+        $this->lastname = $user->getLastname();
     }
 
     /**
      * Method for get all categories of post
      * @return array
      */
-    public function getCategories() : array
+    public function getCategories(): array
     {
         return $this->categories->toArray();
     }
@@ -163,7 +178,7 @@ class Post
      * Method for set categories of post
      * @param ArrayCollection $collection
      */
-    public function setCategories(Category $category) : void
+    public function setCategories(Category $category): void
     {
         $this->categories->add($category);
     }
@@ -176,5 +191,15 @@ class Post
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function getLastname() : ?string
+    {
+        return $this->lastname;
     }
 }

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\Version;
 use Doctrine\Common\Collections\ArrayCollection;
+use DateTime;
 
 
 
@@ -34,18 +35,18 @@ class User implements Authenticatable, CanResetPasswordContract
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name = "created_at", type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
      * @Version @ORM\Column(name = "updated_at", type = "datetime")
      */
-    private $updatedAt;
+    private DateTime $updatedAt;
 
     /**
      * @var string $username
      * @ORM\Column(name="username", type="string", unique=true)
      */
-    private $username;
+    private string $username;
 
     /**
      * @var string $email
@@ -65,15 +66,20 @@ class User implements Authenticatable, CanResetPasswordContract
      */
     private ?string $lastname;
 
+    /**
+     * @var string|null
+     * @ORM\Column(name="avatar_name", type="string", nullable=true)
+     */
+    private ?string $avatar_name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="user", cascade={"persist", "remove"}, fetch = "LAZY")
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="user", fetch = "LAZY")
      */
     private $posts;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Role", inversedBy="user", cascade = {"persist", "remove"}, fetch = "EAGER")
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="user", cascade = {"persist"}, fetch = "EAGER")
      */
     private $role;
 
@@ -181,16 +187,26 @@ class User implements Authenticatable, CanResetPasswordContract
 
     public function setRole(Role $role)
     {
-        $this->role->add($role);
+        $this->role = $role;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt() : DateTime
     {
         return $this->updatedAt;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt() : DateTime
     {
         return $this->createdAt;
+    }
+
+    public function setAvatarName(string $avatar_name) : void
+    {
+        $this->avatar_name = $avatar_name;
+    }
+
+    public function getAvatarName() : ?string
+    {
+        return $this->avatar_name;
     }
 }

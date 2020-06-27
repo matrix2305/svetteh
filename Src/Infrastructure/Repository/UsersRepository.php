@@ -160,6 +160,11 @@ class UsersRepository implements IUsersRepository
         return $this->em->getRepository($this->permission)->findAll();
     }
 
+    public function getOnePermission(int $id) : Permissions
+    {
+        return $this->em->find($this->permission, $id);
+    }
+
 
     public function deletePermission(int $id) : ?string
     {
@@ -212,6 +217,10 @@ class UsersRepository implements IUsersRepository
         return $this->em->find($this->role, $id);
     }
 
+    public function getRoleByName(string $name)
+    {
+        return $this->em->getRepository($this->role)->findOneBy(['role' => $name]);
+    }
     /**
      * Method for add role
      * @param Role $role
@@ -220,7 +229,7 @@ class UsersRepository implements IUsersRepository
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function addRole(Role $role) : ?string
+    public function addRole(Role $role)
     {
         $this->em->getConnection()->beginTransaction();
         try {
@@ -262,7 +271,7 @@ class UsersRepository implements IUsersRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function deleteRole(int $id) : ?string
+    public function deleteRole(int $id)
     {
         $entity = $this->em->find($this->role, $id);
         $this->em->getConnection()->beginTransaction();
@@ -276,4 +285,5 @@ class UsersRepository implements IUsersRepository
             return $exception->getMessage();
         }
     }
+
 }

@@ -13,4 +13,10 @@ interface IPostsService
     public function deletePost(int $id);
 
     public function updatePost(array $data);
+
+    public function addCategory(array $data);
+
+    public function deleteCategory(int $id);
+
+    public function getAllCategories();
 }
