@@ -29,4 +29,6 @@ interface IUsersService
     public function deleteRole(int $id);
 
     public function findRoleById(int $id);
+
+    public function updateRole(array $data);
 }

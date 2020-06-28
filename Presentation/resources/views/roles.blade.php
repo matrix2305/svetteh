@@ -8,7 +8,7 @@
         </div>
         <section>
             <div class="tittle-section">
-                Korisnici
+                Učešća
             </div>
 
             <div class="content-section">
@@ -46,7 +46,7 @@
                                     <a href="{{route('editroles', $role->id)}}"><i style="color: black" class="fas fa-edit"></i></a>
                                 @endif
                             </td>
-                            <td><i onclick="{{($loop == $loop->first)? '' : "document.getElementById('deleteRole".$loop->index."').submit();"}}" class="fas fa-user-minus"></i></td>
+                            <td><i onclick="{{($loop == $loop->first)? '' : "document.getElementById('deleteRole".$loop->index."').submit();"}}" class="fas fa-trash"></i></td>
                             <form id="{{($loop == $loop->first)? '' : 'deleteRole'.$loop->index}}" action="{{route('destroyroles')}}" method="POST" style="display: none">
                                 @csrf
                                 @method('delete')
@@ -76,7 +76,7 @@
                     @csrf
                     @method('put')
                     <label>Naziv učešća</label>
-                    <input type="text" class="form-control @error('rolename') is-invalid @enderror" name="rolename" value="{{ old('rolename') }}" required autocomplete="name" autofocus>
+                    <input type="text" name="rolename" value="{{ old('rolename') }}" required autocomplete="name" autofocus>
                     @error('rolename')
                     <span class="invalid-feedback" role="alert">
                         <strong>Naziv učešća {{ $message }}</strong>
@@ -84,9 +84,14 @@
                     @enderror
                     <label>Boja učešća</label><br>
                     <input type="color" name="rolecolor"/><br>
+                    @error('rolecolor')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>Naziv učešća {{ $message }}</strong>
+                    </span>
+                    @enderror
                     <label>Dozvole učešća</label><br>
                     @foreach($permissions as $per)
-                        <input type="checkbox" name="permission{{$loop->index}}" value="{{$per->id}}">{{$per->name}} <br>
+                        <input type="checkbox" name="permission[]" value="{{$per->id}}">{{$per->name}} <br>
                     @endforeach
                     <button type="submit">
                         Pošalji

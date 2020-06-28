@@ -19,12 +19,12 @@ class Permissions
     private int $id;
 
     /**
-     * @ORM\Column(name = "permission", type = "string")
+     * @ORM\Column(name = "permission", type = "string", length = 50)
      */
     private string $permission;
 
     /**
-     * @ORM\Column(name = "name", type = "string")
+     * @ORM\Column(name = "name", type = "string", length = 50)
      */
     private string $name;
 

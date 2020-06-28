@@ -17,10 +17,13 @@ class AppServiceProvider extends ServiceProvider
         // Binding repositories
         $this->app->bind('AppCore\Interfaces\IUsersRepository', 'Infrastructure\Repository\UsersRepository');
         $this->app->bind('AppCore\Interfaces\IPostsRepository', 'Infrastructure\Repository\PostsRepository');
+        $this->app->bind('AppCore\Interfaces\IContentRepository', 'Infrastructure\Repository\ContentRepository');
+
 
         // Binding services
         $this->app->bind('AppCore\Interfaces\IUsersService', 'AppCore\Services\UsersService');
         $this->app->bind('AppCore\Interfaces\IPostsService', 'AppCore\Services\PostsService');
+        $this->app->bind('AppCore\Interfaces\IContentService', 'AppCore\Services\ContentService');
 
         // Binding Log
         $this->app->bind('AppCore\Interfaces\ILog', 'Infrastructure\Log\Log');

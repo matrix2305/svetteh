@@ -40,7 +40,7 @@
                     @enderror
                     <label>Kategorije objave</label><br>
                     @foreach($categories as $category)
-                        <input type="checkbox" name="category{{$loop->index}}" value="{{$category->id}}">{{$category->name}} <br>
+                        <input type="checkbox" name="category[]" value="{{$category->id}}">{{$category->name}} <br>
                     @endforeach
                     <label>Slika objave</label><br>
                     <input class="form-control @error('image') is-invalid @enderror" type="file" id="postimage" name="image"><br>

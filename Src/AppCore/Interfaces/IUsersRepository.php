@@ -2,7 +2,6 @@
 namespace AppCore\Interfaces;
 
 use AppCore\Entities\User;
-use AppCore\Entities\Permissions;
 use AppCore\Entities\Role;
 
 interface IUsersRepository
@@ -13,19 +12,15 @@ interface IUsersRepository
 
     public function addUser(User $user);
 
-    public function updateUser(array $data);
+    public function updateUser(User $user);
 
-    public function deleteUser(int $id);
+    public function deleteUser(User $user);
 
     public function getUserByEmailorUsername(string $username);
 
-    public function addPermission(Permissions $permissions);
-
     public function getAllPermissions();
 
-    public function deletePermission(int $id);
-
-    public function updatePermission(array $data);
+    public function getOnePermission(int $id);
 
     public function getAllRoles();
 
@@ -35,9 +30,7 @@ interface IUsersRepository
 
     public function addRole(Role $role);
 
-    public function updateRole(array $data);
+    public function updateRole(Role $role);
 
-    public function deleteRole(int $id);
-
-    public function getOnePermission(int $id);
+    public function deleteRole(Role $role);
 }

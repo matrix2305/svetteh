@@ -197,13 +197,16 @@ textarea {
 table {
   border-collapse: collapse;
   width: 100%;
+  table-layout: fixed;
 }
 
 td,
 th {
   border: 1px solid #dddddd;
   text-align: center;
-  padding: 8px;
+  padding: 3px;
+  font-size: 13px;
+  word-wrap: break-word;
 }
 
 tr:nth-child(even) {
@@ -277,6 +280,18 @@ input[type=color] {
 #active {
   background-color: #0e2231;
   color: white;
+}
+
+.image-avatar {
+  display: block;
+  width: 150px;
+  padding: 15px;
+}
+
+.image-post {
+  display: block;
+  width: 500px;
+  padding: 15px;
 }
 
 .footer {

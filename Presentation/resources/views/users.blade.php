@@ -38,12 +38,13 @@
                            <td>{{$user->role->name}}</td>
                            <td>{{$user->updatedAt}}</td>
                            <td>{{$user->createdAt}}</td>
-                           <td><a href=""><i style="color: black" class="fas fa-edit"></i></a></td>
+                           <td><a href="{{route('editusers', $user->id)}}"><i style="color: black" class="fas fa-edit"></i></a></td>
                            <td><i onclick="document.getElementById('deleteUser{{$loop->index}}').submit();" class="fas fa-user-minus"></i></td>
                            <form id="deleteUser{{$loop->index}}" action="{{route('destroyuser')}}" method="POST" style="display: none">
                                @csrf
                                @method('delete')
                                <input type="hidden" name="id" value="{{$user->id}}">
+                               <input type="hidden" name="avatar" value="{{$user->avatar_path}}">
                            </form>
 
                        </tr>

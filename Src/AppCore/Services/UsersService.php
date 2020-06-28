@@ -57,7 +57,20 @@ class UsersService implements IUsersService
     public function updateUser(array $data)
     {
         try {
-            $this->UsersRepository->updateUser($data);
+            $user = $this->UsersRepository->getOneUser(intval($data['id']));
+            $role = $this->UsersRepository->getOneRole(intval($data['role_id']));
+            $user->setRole($role);
+            $user->setEmail($data['email']);
+            $user->setUsername($data['username']);
+            if(!empty($data['password'])){
+                $user->setPassword($data['password']);
+            }
+            if(!empty($data['avatar'])){
+                $user->setAvatarName($data['avatar']);
+            }
+            $user->setName($data['name']);
+            $user->setLastname($data['lastname']);
+            $this->UsersRepository->updateUser($user);
         }catch (Exception $exception){
             $this->Log->AddLog($exception->getMessage());
             return $exception->getMessage();
@@ -67,7 +80,8 @@ class UsersService implements IUsersService
     public function deleteUser(int $id)
     {
         try {
-            $this->UsersRepository->deleteUser($id);
+            $user = $this->UsersRepository->getOneUser($id);
+            $this->UsersRepository->deleteUser($user);
         }catch (Exception $exception){
             $this->Log->AddLog($exception->getMessage());
             return $exception->getMessage();
@@ -80,10 +94,15 @@ class UsersService implements IUsersService
         return UsersDTO::fromEntity($user);
     }
 
-    public function register(string $username) : UsersDTO
+    public function register(string $username) : ?UsersDTO
     {
         $user =  $this->UsersRepository->getUserByEmailorUsername($username);
-        return UsersDTO::fromEntity($user);
+        if(!empty($user)){
+            return UsersDTO::fromEntity($user);
+        }else{
+            return null;
+        }
+
     }
 
     public function findRoleById(int $id) : RoleDTO
@@ -124,6 +143,25 @@ class UsersService implements IUsersService
         }
     }
 
+    public function updateRole(array $data)
+    {
+        try {
+            $entity = $this->UsersRepository->getOneRole(intval($data['id']));
+            $entity->setName($data['name']);
+            $entity->setRoleColor($data['color']);
+            $entity->clearPermissions();
+            $permissions = $data['permissions'];
+            for ($i = 0; $i<count($permissions); $i++){
+                $permission = $this->UsersRepository->getOnePermission(intval($permissions[$i]));
+                $entity->setPermissions($permission);
+            }
+            $this->UsersRepository->updateRole($entity);
+        }catch (Exception $exception){
+            $this->Log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
     public function getAllPermissions() : array
     {
         $permissions =  $this->UsersRepository->getAllPermissions();
@@ -133,7 +171,8 @@ class UsersService implements IUsersService
     public function deleteRole(int $id)
     {
         try {
-            $this->UsersRepository->deleteRole($id);
+            $role = $this->UsersRepository->getOneRole($id);
+            $this->UsersRepository->deleteRole($role);
         }catch (Exception $exception){
             $this->Log->AddLog($exception->getMessage());
             return $exception->getMessage();

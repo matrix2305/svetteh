@@ -46,17 +46,15 @@ class RolesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'rolename' => 'required|string|max:50'
+            'rolename' => 'required|string|max:50',
+            'permission' => 'required|array|max:20'
 
         ]);
-        $data = $request->all();
-        unset($data['_token'], $data['rolename'],$data['rolecolor'], $data['_method']);
         try{
-            $permissions = array_values($data);
             $this->usersService->addRole([
                 'name' => $request->input('rolename'),
                 'color' => $request->input('rolecolor'),
-                'permissions' => $permissions
+                'permissions' => $request->input('permission')
             ]);
             return redirect()->route('roles')->with('success', 'Uspešno dodavanje role!');
         }catch (Exception $exception){
@@ -73,8 +71,8 @@ class RolesController extends Controller
     public function edit($id)
     {
         $role = $this->usersService->findRoleById(intval($id));
-        dd($role);
-        return view('editrole', ['role' => $role]);
+        $permissions = $this->usersService->getAllPermissions();
+        return view('editrole', ['role' => $role, 'permissions' => $permissions]);
     }
 
     /**
@@ -84,9 +82,27 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'id' => 'required',
+                'name' => 'required|max:50',
+                'color' => 'required|max:7',
+                'permission' => 'required|array|max:20'
+            ]
+        );
+        try {
+            $this->usersService->updateRole([
+                'id' => $request->input('id'),
+                'name' => $request->input('name'),
+                'color' => $request->input('color'),
+                'permissions' => $request->input('permission')
+            ]);
+            return redirect()->route('roles')->with('success', 'Uspešna izmena učešća!');
+        }catch (Exception $exception){
+            return redirect()->back()->with('error', 'Greška pri izmeni učešća!');
+        }
     }
 
     /**

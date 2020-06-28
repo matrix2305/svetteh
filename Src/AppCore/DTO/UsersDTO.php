@@ -13,6 +13,7 @@ class UsersDTO extends BaseDTO
     public string $email;
     public ?string $name;
     public ?string $lastname;
+    public ?string $avatar_path;
     public string $updatedAt;
     public string $createdAt;
     public RoleDTO $role;
@@ -26,6 +27,7 @@ class UsersDTO extends BaseDTO
                 'email' => $user->getEmail(),
                 'name' => $user->getName(),
                 'lastname' => $user->getLastname(),
+                'avatar_path' => $user->getAvatarName(),
                 'updatedAt' => $user->getUpdatedAt()->format('d/m/Y  H:i:s'),
                 'createdAt' => $user->getUpdatedAt()->format('d/m/Y  H:i:s'),
                 'role' => RoleDTO::fromEntity($user->getRole())

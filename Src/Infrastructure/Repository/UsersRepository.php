@@ -90,18 +90,11 @@ class UsersRepository implements IUsersRepository
      * @throws ConnectionException
      */
 
-    public function updateUser(array $data)
+    public function updateUser(User $user)
     {
         $this->em->getConnection()->beginTransaction();
         try {
-            $user = $this->em->find($this->user, $data['id']);
-            $user->setEmail($data['email']);
-            $user->setUsername($data['username']);
-            if(!empty($data['password'])){
-                $user->setPassword($data['password']);
-            }
-            $user->setName($data['name']);
-            $user->setLastname($data['lastname']);
+            $this->em->persist($user);
             $this->em->flush();
             $this->em->getConnection()->commit();
         }catch (ConnectionException $exception){
@@ -117,11 +110,10 @@ class UsersRepository implements IUsersRepository
      * @return string
      */
 
-    public function deleteUser(int $id)
+    public function deleteUser(User $user)
     {
         $this->em->getConnection()->beginTransaction();
         try {
-            $user = $this->em->find($this->user, $id);
             $this->em->remove($user);
             $this->em->flush();
             $this->em->getConnection()->commit();
@@ -163,35 +155,6 @@ class UsersRepository implements IUsersRepository
     public function getOnePermission(int $id) : Permissions
     {
         return $this->em->find($this->permission, $id);
-    }
-
-
-    public function deletePermission(int $id) : ?string
-    {
-        $this->em->getConnection()->commit();
-        try {
-            $entity = $this->em->find($this->permission, $id);
-            $this->em->remove($entity);
-            $this->em->flush();
-            $this->em->getConnection()->commit();
-        }catch (ConnectionException $exception){
-            $this->em->rollback();
-            $this->Log->AddLog($exception->getMessage());
-            $exception->getMessage();
-        }
-    }
-
-    public function updatePermission(array $data) : ?string
-    {
-        try {
-            $entity = $this->em->find($this->permission, $data['id'], LockMode::OPTIMISTIC);
-            $entity->setName($data['name']);
-            $entity->setPermissions($data['permissions']);
-            $this->em->flush();
-        }catch (OptimisticLockException $exception){
-            $this->Log->AddLog($exception->getMessage());
-            return $exception->getMessage();
-        }
     }
 
 
@@ -250,13 +213,15 @@ class UsersRepository implements IUsersRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function updateRole(array $data) : ?string
+    public function updateRole(Role $role)
     {
+        $this->em->getConnection()->beginTransaction();
         try {
-            $entity = $this->em->find($this->role, $data['id'], LockMode::OPTIMISTIC);
-            $entity->setRoleColor($data['role_color']);
-            $entity->setRoleName($data['role_name']);
-        }catch (OptimisticLockException $exception){
+            $this->em->persist($role);
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+        }catch (ConnectionException $exception){
+            $this->em->getConnection()->rollBack();
             $this->Log->AddLog($exception->getMessage());
             return $exception->getMessage();
         }
@@ -271,12 +236,11 @@ class UsersRepository implements IUsersRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function deleteRole(int $id)
+    public function deleteRole(Role $role)
     {
-        $entity = $this->em->find($this->role, $id);
         $this->em->getConnection()->beginTransaction();
         try {
-            $this->em->remove($entity);
+            $this->em->remove($role);
             $this->em->flush();
             $this->em->getConnection()->commit();
         }catch (ConnectionException $exception){

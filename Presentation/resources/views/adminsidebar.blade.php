@@ -13,6 +13,7 @@
         <li><a id="{{(request()->path() == '')? 'active':''}}" href="{{route('posts')}}">Objave</a></li>
         <li><a id="{{(request()->path() == '')? 'active':''}}" href="{{route('createposts')}}">Dodaj objavu</a></li>
         <li><a id="{{(request()->path() == route('categories'))? 'active':''}}" href="{{route('categories')}}">Kategorije</a></li>
+        <li><a id="{{(request()->path() == '')? 'active':''}}" href="{{route('comments')}}">Komentari</a></li>
     </ul>
     <div class="sidebar-tittle">
         Korisnici
@@ -26,6 +27,6 @@
         Sadržaj
     </div>
     <ul>
-        <li><a id="{{(request()->path() == '')? 'active':''}}" href="">Uređuj sadržaj</a></li>
+        <li><a id="{{(request()->path() == '')? 'active':''}}" href="{{route('content')}}">Uređuj sadržaj</a></li>
     </ul>
 </aside>

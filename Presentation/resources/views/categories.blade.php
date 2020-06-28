@@ -8,10 +8,15 @@
         </div>
         <section>
             <div class="tittle-section">
-                Korisnici
+                Kategorije
             </div>
 
             <div class="content-section">
+                @if($message = session('updated'))
+                    <div class="true-message">
+                        <p>{{$message}}</p>
+                    </div>
+                @endif
                 @if($message = session('deleted'))
                     <div class="true-message">
                         <p>{{$message}}</p>
@@ -28,9 +33,9 @@
                         <tr>
                             <td>{{$category->name}}</td>
                             <td style="background-color: {{$category->color}}">{{$category->color}}</td>
-                            <td><a href=""><i style="color: black" class="fas fa-edit"></i></a></td>
-                            <td><i onclick="document.getElementById('deleteCategory{{$loop->index}}').submit();" class="fas fa-user-minus"></i></td>
-                            <form id="deleteCategory'{{$loop->index}}" action="{{route('destroycategory')}}" method="POST" style="display: none">
+                            <td><a href="{{route('editcategory', $category->id)}}"><i style="color: black" class="fas fa-edit"></i></a></td>
+                            <td><i onclick="document.getElementById('deleteCategory{{$loop->index}}').submit();" class="fas fa-trash"></i></td>
+                            <form id="deleteCategory{{$loop->index}}" action="{{route('destroycategory')}}" method="POST" style="display: none">
                                 @csrf
                                 @method('delete')
                                 <input type="hidden" name="id" value="{{$category->id}}">
@@ -64,6 +69,11 @@
                     <div class="item-input">
                         <input type="text" name="category_name">
                     </div>
+                    @error('category_name')
+                    <span class="invalid-feedback" role="alert">
+                            <strong>Ime korisnika {{ $message }}</strong>
+                        </span>
+                    @enderror
                     <div class="item-label">
                         <label>Boja kategorije:</label>
                     </div>

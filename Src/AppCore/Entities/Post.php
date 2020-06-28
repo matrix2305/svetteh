@@ -201,4 +201,9 @@ class Post
     {
         return $this->lastname;
     }
+
+    public function clearCategories() : void
+    {
+        $this->categories->clear();
+    }
 }

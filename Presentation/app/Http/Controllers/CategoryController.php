@@ -61,7 +61,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        return view('categories.edit');
+        $category = $this->postsService->findOneCategory(intval($id));
+        return view('editcategory', ['category' => $category]);
     }
 
     /**
@@ -71,9 +72,26 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'id' => 'required|integer',
+                'name' => 'required|string:30',
+                'color' => 'required|string:7'
+            ]
+        );
+
+        try {
+            $this->postsService->updateCategory([
+               'id' => $request->input('id'),
+               'name' => $request->input('name'),
+               'color' => $request->input('color')
+            ]);
+            return redirect()->route('categories')->with('updated', 'Uspešne izmene!');
+        }catch (Exception $exception){
+            return redirect()->back()->with('error', 'Greška pri izmeni!');
+        }
     }
 
     /**

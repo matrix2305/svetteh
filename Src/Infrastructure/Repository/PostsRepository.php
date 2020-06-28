@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Infrastructure\Repository;
 
 use AppCore\Entities\Category;
+use AppCore\Entities\Comment;
 use AppCore\Entities\Post;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\LockMode;
@@ -29,7 +30,13 @@ class PostsRepository implements IPostsRepository
      */
     private $post;
 
+    /**
+     * @var string
+     */
     private $category;
+
+
+    private $comments;
 
     public function __construct(EntityManagerInterface $em, ILog $log)
     {
@@ -37,6 +44,7 @@ class PostsRepository implements IPostsRepository
         $this->log = $log;
         $this->post = Post::class;
         $this->category = Category::class;
+        $this->comments = Comment::class;
     }
 
     /**
@@ -86,37 +94,33 @@ class PostsRepository implements IPostsRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function updatePost(array $data)
+    public function updatePost(Post $post)
     {
+        $this->em->getConnection()->beginTransaction();
         try {
-            $entity = $this->em->find($this->post, $data['id'], LockMode::OPTIMISTIC);
-            $entity->setTittle($data[tittle]);
-            $entity->setText($data['text']);
-            if(!empty($data['img_path'])){
-                $entity->setImgPath($data['img_path']);
-            }
-            $entity->setCategories($data['categories']);
+            $this->em->persist($post);
             $this->em->flush();
-        }catch (OptimisticLockException $exception){
+            $this->em->getConnection()->commit();
+        }catch (ConnectionException $exception){
+            $this->em->getConnection()->rollBack();
             $this->log->AddLog($exception->getMessage());
             return $exception->getMessage();
         }
     }
 
     /**
-     * @param int $id
+     * @param Post $post
      * @return string
      * @throws ConnectionException
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function deletePost(int $id)
+    public function deletePost(Post $post)
     {
-        $entity = $this->em->find($this->post, $id);
         $this->em->getConnection()->beginTransaction();
         try {
-            $this->em->remove($entity);
+            $this->em->remove($post);
             $this->em->flush();
             $this->em->getConnection()->commit();
         }catch (ConnectionException $exception){
@@ -176,14 +180,15 @@ class PostsRepository implements IPostsRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function updateCategory(array $data) : ?string
+    public function updateCategory(Category $category)
     {
+        $this->em->getConnection()->beginTransaction();
         try {
-            $entity = $this->em->find($this->category, $data['id'], LockMode::OPTIMISTIC);
-            $entity->setCategoryName($data['category_name']);
-            $entity->setCategoryColor($data['category_color']);
+            $this->em->persist($category);
             $this->em->flush();
-        }catch (OptimisticLockException $exception){
+            $this->em->getConnection()->commit();
+        }catch (ConnectionException $exception){
+            $this->em->getConnection()->rollBack();
             $this->log->AddLog($exception->getMessage());
             return $exception->getMessage();
         }
@@ -196,17 +201,80 @@ class PostsRepository implements IPostsRepository
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function deleteCategory(int $id)
+    public function deleteCategory(Category $category)
     {
         $this->em->getConnection()->beginTransaction();
         try {
-            $entity = $this->em->find($this->category, $id);
-            $this->em->remove($entity);
+            $this->em->remove($category);
             $this->em->flush();
             $this->em->getConnection()->commit();
         }catch (ConnectionException $exception){
             $this->log->AddLog($exception->getMessage());
             $this->em->getConnection()->rollBack();
+            return $exception->getMessage();
+        }
+    }
+
+    /**
+     * Method for get all comments
+     * @return array
+     */
+    public function getComments() : array
+    {
+        return $this->em->getRepository($this->comments)->findAll();
+    }
+
+    /**
+     * Method for get one comment
+     * @param int $id
+     * @return Comment
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function getOneComment(int $id) : Comment
+    {
+        return $this->em->find($this->comments, $id);
+    }
+
+    /**
+     * Method for insert comment
+     * @param Comment $comment
+     * @return string
+     * @throws ConnectionException
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function insertComment(Comment $comment)
+    {
+        $this->em->getConnection()->beginTransaction();
+        try {
+            $this->em->persist($comment);
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+        }catch (ConnectionException $exception){
+            $this->em->getConnection()->rollBack();
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
+    /**
+     * Method for delete comment
+     * @param Comment $comment
+     * @return string
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function deleteComment(Comment $comment)
+    {
+        $this->em->getConnection()->beginTransaction();
+        try {
+            $this->em->remove($comment);
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+        }catch (ConnectionException $exception){
+            $this->log->AddLog($exception->getMessage());
             return $exception->getMessage();
         }
     }
