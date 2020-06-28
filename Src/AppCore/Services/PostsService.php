@@ -3,8 +3,10 @@ declare(strict_types = 1);
 namespace AppCore\Services;
 
 use AppCore\DTO\CategoryDTO;
+use AppCore\DTO\CommentsDTO;
 use AppCore\DTO\PostsDTO;
 use AppCore\Entities\Category;
+use AppCore\Entities\Comment;
 use AppCore\Entities\Post;
 use AppCore\Interfaces\IPostsService;
 use AppCore\Interfaces\IPostsRepository;
@@ -64,13 +66,32 @@ class PostsService implements IPostsService
 
     public function updatePost(array $data)
     {
-        // TODO: Implement updatePost() method.
+        try {
+            $post = $this->postsRepository->getOnePosts($data['id']);
+            $post->setTitle($data['title']);
+            $post->setText($data['text']);
+            if(!empty($data['image'])){
+                $post->setImgPath($data['image']);
+            }
+            $categories = $data['categories'];
+            $post->clearCategories();
+            for($i=0; $i<count($categories); $i++){
+                $category = $this->postsRepository->getOneCategory(intval($categories[$i]));
+                $post->setCategories($category);
+            }
+            $this->postsRepository->updatePost($post);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+
     }
 
     public function deletePost(int $id)
     {
         try {
-            $this->postsRepository->deletePost($id);
+            $entity = $this->postsRepository->getOnePosts($id);
+            $this->postsRepository->deletePost($entity);
         }catch (Exception $exception){
             $this->log->AddLog($exception->getMessage());
             return $exception->getMessage();
@@ -81,6 +102,12 @@ class PostsService implements IPostsService
     {
         $categories = $this->postsRepository->getAllCategories();
         return CategoryDTO::fromCollection($categories);
+    }
+
+    public function findOneCategory(int $id) : CategoryDTO
+    {
+        $category = $this->postsRepository->getOneCategory($id);
+        return CategoryDTO::fromEntity($category);
     }
 
     public function addCategory(array $data)
@@ -96,14 +123,72 @@ class PostsService implements IPostsService
         }
     }
 
-    public function deleteCategory(int $id)
+    public function updateCategory(array $data)
     {
         try {
-            $this->postsRepository->deleteCategory($id);
+            $entity = $this->postsRepository->getOneCategory(intval($data['id']));
+            $entity->setCategoryName($data['name']);
+            $entity->setCategoryColor($data['color']);
+            $this->postsRepository->updateCategory($entity);
         }catch (Exception $exception){
             $this->log->AddLog($exception->getMessage());
             return $exception->getMessage();
         }
     }
 
+    public function deleteCategory(int $id)
+    {
+        try {
+            $entity = $this->postsRepository->getOneCategory($id);
+            $this->postsRepository->deleteCategory($entity);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
+    public function findComments() : array
+    {
+        $comments = $this->postsRepository->getComments();
+        return CommentsDTO::fromCollection($comments);
+    }
+
+    public function addComment(array $data)
+    {
+        try {
+            $post = $this->postsRepository->getOnePosts(intval($data['post_id']));
+            $comment = new Comment();
+            $comment->setName($data['name']);
+            $comment->setComment($data['comment']);
+            $comment->setEmail($data['email']);
+            $comment->setPost($post);
+            $this->postsRepository->insertComment($comment);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
+    public function allowComment(int $id)
+    {
+        try {
+            $entity = $this->postsRepository->getOneComment($id);
+            $entity->setAllowed();
+            $this->postsRepository->insertComment($entity);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
+
+    public function deleteComment(int $id)
+    {
+        try {
+            $comment = $this->postsRepository->getOneComment($id);
+            $this->postsRepository->deleteComment($comment);
+        }catch (Exception $exception){
+            $this->log->AddLog($exception->getMessage());
+            return $exception->getMessage();
+        }
+    }
 }

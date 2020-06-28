@@ -21,7 +21,7 @@ class Comment
     private int $id;
 
     /**
-     * @ORM\Column(name="name", type="string")
+     * @ORM\Column(name="name", type="string", length = 30)
      */
     private string $name;
 
@@ -31,7 +31,7 @@ class Comment
     private string $text;
 
     /**
-     * @ORM\Column(name="email", type="string")
+     * @ORM\Column(name="email", type="string", length = 70)
      */
     private string $email;
 
@@ -48,13 +48,12 @@ class Comment
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Post", inversedBy="comment", cascade = {"persist", "remove"}, fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Post", inversedBy="comment", cascade = {"persist"}, fetch="LAZY")
      */
     private Post $post;
 
     public function __construct()
     {
-        $this->Post = new ArrayCollection();
         $this->allowed = 0;
     }
 
@@ -91,5 +90,30 @@ class Comment
     public function setEmail(string $email) : void
     {
         $this->email = $email;
+    }
+
+    public function getCreatedAt() : DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function getAllowed() : int
+    {
+        return $this->allowed;
+    }
+
+    public function setAllowed() : void
+    {
+        $this->allowed = 1;
+    }
+
+    public function getPost() : Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(Post $post) : void
+    {
+        $this->post = $post;
     }
 }

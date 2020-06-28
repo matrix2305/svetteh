@@ -22,12 +22,12 @@ class Role
      */
     private int $id;
     /**
-     * @ORM\Column(name="role", type="string", unique=true)
+     * @ORM\Column(name="role", type="string", unique=true, length = 50)
      */
     private string $role;
 
     /**
-     * @ORM\Column(name="color", type="string")
+     * @ORM\Column(name="color", type="string", length = 7)
      */
     private string $color;
 
@@ -46,6 +46,11 @@ class Role
     {
         $this->permissions = new ArrayCollection();
         $this->user = new ArrayCollection();
+    }
+
+    public function setId(int $id) : void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -101,6 +106,11 @@ class Role
     public function getPermissions() : array
     {
         return $this->permissions->toArray();
+    }
+
+    public function clearPermissions() : void
+    {
+        $this->permissions->clear();
     }
 
     /**

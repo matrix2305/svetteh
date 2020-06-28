@@ -4,6 +4,7 @@ namespace AppCore\Interfaces;
 
 use AppCore\Entities\Post;
 use AppCore\Entities\Category;
+use AppCore\Entities\Comment;
 
 interface IPostsRepository
 {
@@ -13,9 +14,9 @@ interface IPostsRepository
 
     public function addPost(Post $post);
 
-    public function updatePost(array $data);
+    public function updatePost(Post $post);
 
-    public function deletePost(int $id);
+    public function deletePost(Post $post);
 
     public function getAllCategories();
 
@@ -23,7 +24,15 @@ interface IPostsRepository
 
     public function addCategory(Category $category);
 
-    public function updateCategory(array $data);
+    public function updateCategory(Category $category);
 
-    public function deleteCategory(int $id);
+    public function deleteCategory(Category $category);
+
+    public function getComments();
+
+    public function insertComment(Comment $comment);
+
+    public function getOneComment(int $id);
+
+    public function deleteComment(Comment $comment);
 }

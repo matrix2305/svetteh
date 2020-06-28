@@ -43,7 +43,7 @@ class PostsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -51,26 +51,23 @@ class PostsController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'text' => 'required|string',
-                'image' => 'required|image|mimes:jpeg,jpg,png,giff,svg,bmp|max:4096'
+                'image' => 'required|image|mimes:jpeg,jpg,png,giff,svg,bmp|max:4096',
+                'category' => 'required|array|max:20'
             ]
         );
 
         $user_id = Auth::user()->getId();
-        $data = $request->all();
-        unset($data['_token'], $data['_method'], $data['title'], $data['text'], $data['image']);
-
         try {
-            $categories = array_values($data);
             $image_name = time().'.'.$request->image->extension();
             $request->image->move(public_path('images/posts'), $image_name);
             $this->postsService->addPost([
                 'title' => $request->input('title'),
                 'text' => $request->input('text'),
                 'image' => $image_name,
-                'categories' => $categories,
+                'categories' => $request->input('category'),
                 'user_id' => $user_id,
             ]);
-            return redirect()->route('createposts')->with('succes', 'Uspešno dodat post!');
+            return redirect()->route('createposts')->with('success', 'Uspešno dodat post!');
         }catch (Exception $exception){
             unlink(public_path('images/posts'.$image_name));
             return redirect()->back()->with('error', 'Greška pri dodavanju!');
@@ -87,7 +84,9 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = $this->postsService->findOnePost(intval($id));
+        $categories = $this->postsService->getAllCategories();
+        return view('editpost', ['post' => $post, 'categories' => $categories]);
     }
 
     /**
@@ -97,9 +96,46 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate(
+          [
+              'id' => 'required|integer',
+              'image' => 'image|mimes:jpg,png,svg,bmp,jpeg|max:4096',
+              'lastimage' => 'required|string:30',
+              'title' => 'required|string:30',
+              'text' => 'required',
+              'categories' => 'required|array',
+          ]
+        );
+
+
+        try {
+            if ($request->hasFile('avatar')){
+                $avatar = $request->file('image');
+                unlink(public_path('/images/posts'.$request->input('lastimage')));
+                $extension = $avatar->getExtension();
+                $image_name = time().$extension;
+                $avatar->move(public_path('/images/posts/'.$image_name));
+            }else{
+                $image_name = null;
+            }
+
+            $this->postsService->updatePost(
+                [
+                    'id' => $request->input('id'),
+                    'image' => $image_name,
+                    'title' => $request->input('title'),
+                    'text' => $request->input('text'),
+                    'categories' => $request->input('categories'),
+                ]
+            );
+
+            return redirect()->route('posts')->with('success', 'Uspešne izmene!');
+        }catch (Exception $exception){
+            return redirect()->back()->with('error', 'Neuspešne izmene!');
+        }
+
     }
 
     /**
@@ -111,10 +147,17 @@ class PostsController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer'
+            'id' => 'required|integer',
+            'image' => 'required|string:30'
         ]);
-        $id = $request->input('id');
-        $this->postsService->deletePost(intval($id));
-        return redirect()->route('posts')->with('deleted', 'Uspešno obrisana objava!');
+        try {
+            $image = $request->input('image');
+            unlink(public_path('/images/posts/'.$image));
+            $id = $request->input('id');
+            $this->postsService->deletePost(intval($id));
+            return redirect()->route('posts')->with('deleted', 'Uspešno obrisana objava!');
+        }catch (Exception $exception){
+            return redirect()->route('posts')->with('error', 'Greška pri brisanju!');
+        }
     }
 }

@@ -19,4 +19,17 @@ interface IPostsService
     public function deleteCategory(int $id);
 
     public function getAllCategories();
+
+    public function findOneCategory(int $id);
+
+    public function updateCategory(array $data);
+
+    public function findComments();
+
+    public function addComment(array $data);
+
+    public function allowComment(int $id);
+
+    public function deleteComment(int $id);
+
 }

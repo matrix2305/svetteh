@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use AppCore\Interfaces\IUsersService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Exception;
 
 class UsersController extends Controller
 {
@@ -70,7 +71,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = $this->usersService->getOneUser(intval($id));
+        $roles = $this->usersService->getAllRoles();
+        return view('edituser', ['user' => $user, 'roles' => $roles]);
     }
 
     /**
@@ -80,9 +83,51 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'id' => 'required|integer',
+                'lastavatar' => 'required|string:30',
+                'avatar' => 'image|mimes:jpg,png,svg,bmp,jpeg|max:4096',
+                'username' => 'required|string:30',
+                'name' => 'string:30',
+                'lastname' => 'string:50',
+                'email' => 'required|email',
+                'role' => 'required|integer',
+                'password' => 'min:8|confirmed',
+            ]
+        );
+
+        try {
+            if ($request->hasFile('avatar')){
+                $avatar = $request->file('avatar');
+                unlink(public_path('/images/avatar'.$request->input('lastavatar')));
+                $extension = $avatar->getExtension();
+                $avatar_name = time().$extension;
+                $avatar->move(public_path('/images/avatars/'.$avatar_name));
+            }else{
+                $avatar_name = null;
+            }
+
+            $this->usersService->updateUser(
+                [
+                    'id' => $request->input('id'),
+                    'avatar' => $avatar_name,
+                    'username' => $request->input('username'),
+                    'name' => $request->input('name'),
+                    'lastname' => $request->input('lastname'),
+                    'email' => $request->input('email'),
+                    'role_id' => $request->input('role'),
+                    'password' => Hash::make($request->input('password'))
+                ]
+            );
+
+            return redirect()->route('users')->with('success', 'Uspešne izmene!');
+        }catch (Exception $exception){
+            return redirect()->back()->with('error', 'Neuspešne izmene!');
+        }
+
     }
 
     /**
@@ -95,11 +140,19 @@ class UsersController extends Controller
     {
        $request->validate(
            [
-               'id' => 'required'
+               'id' => 'required',
+               'avatar' => 'required|string'
            ]
        );
+        try {
+            if(file_exists(public_path('/images/avatars/'.$request->input('avatar')))){
+                unlink(public_path('/images/avatars/'.$request->input('avatar')));
+            }
 
-       $this->usersService->deleteUser($request->input('id'));
-       return redirect()->route('users')->with('deleted', 'Uspešno obrisan korisnik!');
+            $this->usersService->deleteUser($request->input('id'));
+            return redirect()->route('users')->with('deleted', 'Uspešno obrisan korisnik!');
+        }catch (Exception $exception){
+            return redirect()->back()->with('error', 'Došlo je do problema sa brisanjem!');
+        }
     }
 }

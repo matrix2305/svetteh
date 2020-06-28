@@ -26,19 +26,19 @@ class Category
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name = "created_at", type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
      * @Version @ORM\Column(name="updated_at", type = "datetime")
      */
-    private $updatedAt;
+    private DateTime $updatedAt;
     /**
-     * @ORM\Column (name="category_name", type="string", unique=true)
+     * @ORM\Column (name="category_name", type="string", unique=true, length = 30)
      */
     private string $categoryName;
 
     /**
-     * @ORM\Column (name="category_color", type="string")
+     * @ORM\Column (name="category_color", type="string", length = 7)
      */
     private string $categoryColor;
 

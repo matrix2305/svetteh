@@ -32,7 +32,7 @@ class Content
     private string $adress;
 
     /**
-     * @ORM\Column(name = "email", type = "string", length = 50)
+     * @ORM\Column(name = "email", type = "string", length = 70)
      */
     private string $email;
 
