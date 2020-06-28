@@ -17,6 +17,11 @@
     }
   },
   "extra": {
+    "laravel": {
+      "providers": [
+        "Infrastructure\\Services\\Permission\\PermissionProvider"
+      ]
+    },
     "branch-alias": {
       "dev-master": "@dev"
     }
