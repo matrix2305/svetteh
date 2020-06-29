@@ -35,8 +35,12 @@
                         <th>Autor</th>
                         <th>Vreme objavljivanja</th>
                         <th>Vreme poslednje izmene</th>
-                        <th>Izmeni</th>
-                        <th>Obriši</th>
+                        @if(Permission::Check('posts.edit'))
+                            <th>Izmeni</th>
+                        @endif
+                        @if(Permission::Check('posts.delete'))
+                            <th>Obriši</th>
+                        @endif
                     </tr>
                     @foreach($posts as $post)
                         <tr>
@@ -59,14 +63,18 @@
                             <td>{{$post->name.' '.$post->lastname}}</td>
                             <td>{{$post->createdAt}}</td>
                             <td>{{$post->updatedAt}}</td>
-                            <td><a href="{{route('editposts', $post->id)}}"><i style="color: black" class="fas fa-edit"></i></a></td>
-                            <td><i onclick="document.getElementById('deletePost{{$loop->index}}').submit();" class="fas fa-trash"></i></td>
-                            <form id="deletePost{{$loop->index}}" action="{{route('destroyposts')}}" method="POST" style="display: none">
-                                @csrf
-                                @method('delete')
-                                <input type="hidden" name="id" value="{{$post->id}}">
-                                <input type="hidden" name="image" value="{{$post->image_path}}">
-                            </form>
+                            @if(Permission::Check('posts.edit'))
+                                <td><a href="{{route('editposts', $post->id)}}"><i style="color: black" class="fas fa-edit"></i></a></td>
+                            @endif
+                            @if(Permission::Check('posts.delete'))
+                                <td><i onclick="document.getElementById('deletePost{{$loop->index}}').submit();" class="fas fa-trash"></i></td>
+                                <form id="deletePost{{$loop->index}}" action="{{route('destroyposts')}}" method="POST" style="display: none">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="hidden" name="id" value="{{$post->id}}">
+                                    <input type="hidden" name="image" value="{{$post->image_path}}">
+                                </form>
+                            @endif
                         </tr>
                     @endforeach
                 </table>

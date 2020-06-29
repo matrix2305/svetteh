@@ -29,7 +29,7 @@ class Content
     /**
      * @ORM\Column(name = "adress", type = "string", length = 100, nullable = true)
      */
-    private string $adress;
+    private ?string $adress;
 
     /**
      * @ORM\Column(name = "email", type = "string", length = 70)
@@ -39,17 +39,17 @@ class Content
     /**
      * @ORM\Column(name = "phone", type = "string", length = 50, nullable = true)
      */
-    public string $phone;
+    public ?string $phone;
 
     /**
      * @ORM\Column(name = "instagram", type = "string", length = 100, nullable = true)
      */
-    private string $instagram;
+    private ?string $instagram;
 
     /**
      * @ORM\Column(name = "facebook", type = "string", length = 100, nullable = true)
      */
-    private string $facebook;
+    private ?string $facebook;
 
     public function getId() : int
     {
@@ -86,7 +86,7 @@ class Content
         $this->email = $email;
     }
 
-    public function getAdress() : string
+    public function getAdress() : ?string
     {
         return $this->adress;
     }
@@ -96,7 +96,7 @@ class Content
         $this->adress = $adress;
     }
 
-    public function getPhone() : string
+    public function getPhone() : ?string
     {
         return $this->phone;
     }
@@ -116,7 +116,7 @@ class Content
         $this->instagram = $instagram;
     }
 
-    public function getFacebook() : string
+    public function getFacebook() : ?string
     {
         return $this->facebook;
     }

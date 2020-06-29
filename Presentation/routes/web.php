@@ -63,6 +63,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function (){
         Route::get('/', "ContentController@index")->name('content');
         Route::patch('/', "ContentController@store")->name('updatecontent');
     });
+
+    Route::post('/sendmail', 'PortalController@guestsMail')->name('email');
 });
 
 

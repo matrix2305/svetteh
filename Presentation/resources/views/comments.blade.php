@@ -29,8 +29,12 @@
                         <th>Tekst</th>
                         <th>Objava</th>
                         <th>Vreme komentarisanja</th>
-                        <th>Dozvoli</th>
-                        <th>Obrisi</th>
+                        @if(Permission::Check('comments.allow'))
+                            <th>Dozvoli</th>
+                        @endif
+                        @if(Permission::Check('comments.delete'))
+                            <th>Obrisi</th>
+                        @endif
                     </tr>
                     @foreach($comments as $comment)
                         @if($comment->allowed == 1)
@@ -40,18 +44,23 @@
                                 <td>{{$comment->text}}</td>
                                 <td>{{$comment->posttitle}}</td>
                                 <td>{{$comment->createdAt}}</td>
-                                <td><i onclick="document.getElementById('allowComment{{$loop->index}}').submit();" class="fas fa-check"></i></td>
-                                <td><i onclick="document.getElementById('deleteComment{{$loop->index}}').submit();" class="fas fa-trash"></i></td>
+                                @if(Permission::Check('comments.allow'))
+                                    <td><i onclick="document.getElementById('allowComment{{$loop->index}}').submit();" class="fas fa-check"></i></td>
+                                    <form id="allowComment{{$loop->index}}" method="POST" action="{{route('allowcomment')}}" style="display: none">
+                                        @csrf
+                                        <input type="hidden" value="{{$comment->id}}">
+                                    </form>
+                                @endif
+                                @if(Permission::Check('comments.delete'))
+                                    <td><i onclick="document.getElementById('deleteComment{{$loop->index}}').submit();" class="fas fa-trash"></i></td>
+                                    <form id="deleteComment{{$loop->index}}" method="POST" action="{{route('deletecomment')}}" style="display: none">
+                                        @csrf
+                                        @method('delete')
+                                        <input type="hidden" value="{{$comment->id}}">
+                                    </form>
+                                @endif
                             </tr>
-                            <form id="allowComment{{$loop->index}}" method="POST" action="{{route('allowcomment')}}" style="display: none">
-                                @csrf
-                                <input type="hidden" value="{{$comment->id}}">
-                            </form>
-                            <form id="deleteComment{{$loop->index}}" method="POST" action="{{route('deletecomment')}}" style="display: none">
-                                @csrf
-                                @method('delete')
-                                <input type="hidden" value="{{$comment->id}}">
-                            </form>
+
                         @endif
                     @endforeach
                 </table>
@@ -80,8 +89,9 @@
                         <th>Tekst</th>
                         <th>Objava</th>
                         <th>Vreme komentarisanja</th>
-                        <th>Dozvoli</th>
-                        <th>Obrisi</th>
+                        @if(Permission::Check('comments.delete'))
+                            <th>Obrisi</th>
+                        @endif
                     </tr>
                     @foreach($comments as $comment)
                         @if($comment->allowed == 0)
@@ -91,13 +101,16 @@
                                 <td>{{$comment->text}}</td>
                                 <td>{{$comment->posttitle}}</td>
                                 <td>{{$comment->createdAt}}</td>
-                                <td><i onclick="document.getElementById('deleteComment{{$loop->index}}').submit();" class="fas fa-trash"></i></td>
+                                @if(Permission::Check('comments.delete'))
+                                    <td><i onclick="document.getElementById('deleteComment{{$loop->index}}').submit();" class="fas fa-trash"></i></td>
+                                    <form id="deleteComment{{$loop->index}}" method="POST" action="{{route('deletecomment')}}" style="display: none">
+                                        @csrf
+                                        @method('delete')
+                                        <input type="hidden" value="{{$comment->id}}">
+                                    </form>
+                                @endif
                             </tr>
-                            <form id="deleteComment{{$loop->index}}" method="POST" action="{{route('deletecomment')}}" style="display: none">
-                                @csrf
-                                @method('delete')
-                                <input type="hidden" value="{{$comment->id}}">
-                            </form>
+
                         @endif
                     @endforeach
                 </table>

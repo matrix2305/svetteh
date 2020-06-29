@@ -11,8 +11,8 @@ class ContentDTO extends BaseDTO
     public ?string $adress;
     public ?string $phone;
     public string $email;
-    public string $instagram;
-    public string $facebook;
+    public ?string $instagram;
+    public ?string $facebook;
 
     public static function fromEntity(Content $content){
         return new self(

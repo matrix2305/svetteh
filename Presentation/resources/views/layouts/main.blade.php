@@ -15,17 +15,12 @@
             <div class="logo">
                 <img src="/img/logo.png">
             </div>
-            @if (session('status'))
-                <div class="user-info" role="alert">
-                    <p>Dobrodošao korisniče {{ session('status') }}</p>
-                </div>
-            @endif
             <div class="navbar">
                 <ul>
-                    <li><a id="{{(request()->path() == '/')? 'active':''}}" href="/">Početna</a></li>
+                    <li id="{{(request()->path() == '/')? 'active':''}}"><a href="/">Početna</a></li>
                     @if (Route::has('login'))
                         @auth
-                            <li><a id="{{($path = explode('/',request()->path())[0] == 'dashboard')? 'active':''}}" href="{{ url('/dashboard') }}">Panel</a></li>
+                            <li id="{{($path = explode('/',request()->path())[0] == 'dashboard')? 'active':''}}"><a href="{{ url('/dashboard') }}">Panel</a></li>
                             <li onclick="document.getElementById('logout-form').submit();"><a>Odjavi se</a></li>
                             <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none">
                                 @csrf
@@ -39,6 +34,17 @@
                         @endauth
                     @endif
                 </ul>
+
+                @if(request()->path() == '' or request()->path() == '/')
+                    <div class="social-icons">
+                        @if($content->facebook != null)
+                            <a href="{{$content->facebook}}"><i class="fab fa-facebook-f"></i></a>
+                        @endif
+                        @if($content->instagram != null)
+                            <a href="{{$content->instagram}}"><i class="fab fa-instagram"></i></a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
     </header>

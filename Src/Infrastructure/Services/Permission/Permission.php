@@ -2,18 +2,25 @@
 
 
 namespace Infrastructure\Services\Permission;
+use Illuminate\Support\Facades\Auth;
 
 
 class Permission
 {
-    //ovde ti ide servise koji god i DI
+    private $permissions;
 
     public function __construct()
     {
+        $this->permissions = Auth::user()->getRole()->getPermissions();
     }
 
-    public function Permission()
+    public function Check($check)
     {
-        //return rezultat iz servisa
+        foreach ($this->permissions as $permission){
+            if ($permission->getPermission() == $check){
+                return true;
+            }
+        }
+        return false;
     }
 }

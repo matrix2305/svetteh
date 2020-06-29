@@ -79,6 +79,18 @@ class InitSeed extends Seeder
                     'permission' => 'category.delete',
                     'name' => 'Brisanje kategorije'
                 ],
+                [
+                    'permission' => 'comments.allow',
+                    'name' => 'Odobravanje komentara'
+                ],
+                [
+                    'permission' => 'comments.delete',
+                    'name' => 'Brisanje komentara'
+                ],
+                [
+                    'permission' => 'content.edit',
+                    'name' => 'Izmena sadržaja'
+                ],
             ]
         );
 
@@ -131,6 +143,18 @@ class InitSeed extends Seeder
                 [
                     'role_id' => 1,
                     'permissions_id' => 12,
+                ],
+                [
+                    'role_id' => 1,
+                    'permissions_id' => 13,
+                ],
+                [
+                    'role_id' => 1,
+                    'permissions_id' => 14,
+                ],
+                [
+                    'role_id' => 1,
+                    'permissions_id' => 15,
                 ],
             ]
         );

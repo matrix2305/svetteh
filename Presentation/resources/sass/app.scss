@@ -6,11 +6,11 @@
 
 a:link,
 a:visited {
-    color: #C51417;
+    color: $green_color;
     text-decoration: none;
 }
 a:hover {
-    color: #4F0103;
+    color: #038b32;
     text-decoration: none;
 }
 a:active {
@@ -31,45 +31,68 @@ body{
     margin: 0 auto;
 }
 
+
+
 .hcontent{
     width: 1200px;
     margin: 0 auto;
-    background-color: $header_color;
+    background-color: $footer_color;
     border-bottom: 2px solid $footer_color;
     border-radius: 3px 3px 0 0;
+    display: flow-root;
 }
 
+.social-icons{
+    float: right;
+    font-size: 20px;
+    margin: 5px 20px 5px 5px;
+}
+
+.social-icons a{
+    color: #fff0ff;
+    padding: 5px;
+}
+
+.social-icons a:hover{
+    color: $green_color;
+}
 
 .navbar{
-    border-top: 2px solid $footer_color;
+    clear: both;
+    border-top: 2px solid #fff0ff;
     display: flow-root;
 }
 
 .navbar ul{
     list-style: none;
-    display: flex;
+    float: left;
     padding: 0;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
+    margin: 3px 0 0 15px;
 }
 
+.navbar ul li{
+    margin: 0 5px 0 5px;
+    padding: 5px;
+    text-transform: uppercase;
+    float: left;
+    background-color: white;
+}
 
 .navbar ul li a{
     color: black;
-    text-transform: uppercase;
-    padding: 5px 5px 3px 5px;
-    font-size: 20px;
-    font-weight: 400;
 }
 
-.navbar ul li a:hover{
-    background-color: $green_color;
+.navbar ul li:hover{
+    background-color: #e3e3e3;
     color: white;
 }
 
+.navbar ul li a:hover{
+    color: black;
+}
+
 .logo{
-    margin: 15px auto;
+    float: left;
     padding: 15px;
     width: 500px;
 }
@@ -89,6 +112,7 @@ body{
 }
 
 .main{
+    clear: both;
     flex-basis: 840px;
     padding: 15px;
 }
@@ -246,7 +270,7 @@ input[type=color]{
     text-transform: uppercase;
     font-weight: 500;
     border-bottom: 2px solid black;
-    font-size: 18px;
+    font-size: 16px;
     padding: 5px 0 5px 0;
 }
 
@@ -275,7 +299,7 @@ input[type=color]{
 }
 
 .sidebar ul li a:hover{
-    background-color: $green_color;
+    background-color: $footer_color;
     color: white;
 }
 
@@ -284,7 +308,10 @@ input[type=color]{
 }
 
 #active{
-    background-color: $footer_color;
+    background-color: $green_color;
+    color: white;
+}
+#active a{
     color: white;
 }
 
@@ -300,16 +327,115 @@ input[type=color]{
     padding: 15px;
 }
 
+.contact-footer{
+    background-color: $footer_color;
+    color: white;
+    display: flow-root;
+    width: 100%;
+}
+.contact-info{
+    float: left;
+    border-radius: 3px;
+    width: 250px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    top: 100px;
+    left: 100px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.contact-info a{
+    color: $green_color;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.contact-form{
+    float: right;
+    width: 300px;
+    padding: 15px;
+    margin: 15px 100px 15px 0;
+}
+
+.contact-form button{
+    background-color: $green_color;
+}
+
 .footer{
     margin: 0 auto;
     width: 1200px;
     text-align: center;
     background-color: $footer_color;
     border-radius: 0 0 3px 3px;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .footer p{
     color: white;
     padding: 15px;
     margin: 0;
+}
+
+.float-right{
+    width: 100px;
+}
+
+.post0{
+    grid-area: post0;
+    width: 200px;
+    border-radius: 2px;
+    padding: 15px;
+    color: white;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.post1{
+    grid-area: post1;
+    padding: 15px;
+    color: white;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.post2{
+    grid-area: post2;
+    padding: 15px;
+    color: white;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.background-color{
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+}
+
+.categories{
+    display: flow-root;
+}
+
+.category-item{
+    float: left;
+    padding: 5px;
+    margin: 3px;
+    color: white;
+    border-radius: 2px;
+}
+
+.category-item:hover{
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.posts-grid{
+    display: grid;
+    grid-gap: 10px;
+    padding: 10px;
+    grid-template-areas:
+    'post0 post1'
+    'post0 post2';
 }

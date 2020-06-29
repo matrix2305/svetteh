@@ -25,8 +25,8 @@ class ContentController extends Controller
             [
                 'name' => 'required|string:50',
                 'text' => 'required',
-                'adress' => 'string:100',
-                'phone' => 'string:50',
+                'adress' => 'max:100',
+                'phone' => 'max:50',
                 'email' => 'required|email|max:70',
                 'instagram' => 'max:100',
                 'facebook' => 'max:100'
