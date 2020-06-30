@@ -44,31 +44,31 @@ class User implements Authenticatable, CanResetPasswordContract
 
     /**
      * @var string $username
-     * @ORM\Column(name="username", type="string", unique=true)
+     * @ORM\Column(name="username", type="string", unique=true, length = 50)
      */
     private string $username;
 
     /**
      * @var string $email
-     * @ORM\Column(name="email", type="string", unique=true)
+     * @ORM\Column(name="email", type="string", unique=true, length = 70)
      */
     private string $email;
 
     /**
      * @var string $name
-     * @ORM\Column(name="name", type="string", nullable=true)
+     * @ORM\Column(name="name", type="string", nullable=true, length = 50)
      */
     private ?string $name;
 
     /**
      * @var string $lastname
-     * @ORM\Column(name="lastname", type="string", nullable=true)
+     * @ORM\Column(name="lastname", type="string", nullable=true, length = 70)
      */
     private ?string $lastname;
 
     /**
      * @var string|null
-     * @ORM\Column(name="avatar_name", type="string", nullable=true)
+     * @ORM\Column(name="avatar_name", type="string", nullable=true, length = 30)
      */
     private ?string $avatar_name;
 
