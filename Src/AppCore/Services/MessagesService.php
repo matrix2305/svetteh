@@ -42,8 +42,8 @@ class MessagesService implements IMessagesService
             $message->setName($data['name']);
             $message->setEmail($data['email']);
             $message->setMessage($data['message']);
+
             $this->messageRepository->insertMessage($message);
-            dd($message);
         }catch (Exception $exception){
             $this->log->AddLog($exception->getMessage());
             return $exception->getMessage();
