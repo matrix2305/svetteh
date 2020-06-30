@@ -6,7 +6,9 @@ use App\Events\SendedMessageToDatabaseEvent;
 use App\Events\Test;
 use App\Jobs\SendEmail;
 use AppCore\Interfaces\IContentService;
+use AppCore\Interfaces\IMessagesService;
 use AppCore\Interfaces\IPostsService;
+use AppCore\Services\MessagesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 
@@ -14,13 +16,16 @@ class PortalController extends Controller
 {
     private IPostsService $postService;
 
+    private IMessagesService $messagesService;
+
     private IContentService $contentService;
 
 
-    public function __construct(IPostsService $postService, IContentService $contentService)
+    public function __construct(IPostsService $postService, IContentService $contentService, MessagesService $messagesService)
     {
         $this->contentService = $contentService;
         $this->postService = $postService;
+        $this->messagesService = $messagesService;
     }
 
     public function index()
@@ -42,7 +47,6 @@ class PortalController extends Controller
         );
 
         SendEmail::dispatch($request->all());
-        Event::dispatch(new SendedMessageToDatabaseEvent($request->all()));
         return redirect()->back()->with('success','Uspešno poslata poruka!');
     }
 }

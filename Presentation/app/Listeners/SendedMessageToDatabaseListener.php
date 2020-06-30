@@ -6,7 +6,7 @@ use AppCore\Interfaces\IMessagesService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendedMessageToDatabaseListener
+class SendedMessageToDatabaseListener implements ShouldQueue
 {
     private IMessagesService $messageService;
 
