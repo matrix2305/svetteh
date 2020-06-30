@@ -36,7 +36,7 @@ class Comment
     private string $email;
 
     /**
-     * @ORM\Column(name="allowed", type="integer")
+     * @ORM\Column(name="allowed", type="integer", length = 1)
      */
     private int $allowed;
 
