@@ -35,7 +35,7 @@
                 <input type="email" name="email" placeholder="vaša e-pošta..">
 
                 <label>Poruka: </label>
-                <textarea name="subject" placeholder="poruka..." style="height:200px"></textarea>
+                <textarea name="message" placeholder="poruka..." style="height:200px"></textarea>
 
                 <button>Pošalji</button>
             </form>

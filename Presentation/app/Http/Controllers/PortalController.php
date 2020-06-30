@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendedMessageToDatabaseEvent;
+use App\Events\Test;
 use App\Jobs\SendEmail;
 use AppCore\Interfaces\IContentService;
 use AppCore\Interfaces\IPostsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 
 class PortalController extends Controller
 {
@@ -39,6 +42,7 @@ class PortalController extends Controller
         );
 
         SendEmail::dispatch($request->all());
+        Event::dispatch(new SendedMessageToDatabaseEvent($request->all()));
         return redirect()->back()->with('success','Uspešno poslata poruka!');
     }
 }

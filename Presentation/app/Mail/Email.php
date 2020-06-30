@@ -28,7 +28,7 @@ class Email extends Mailable
      */
     public function build()
     {
-        return $this->from('info@svet-tehnologija.rs', 'Svet Tehnologija')->subject('Test mail')
+        return $this->from(config('mail.from.address'), 'Svet Tehnologija')->subject('Test mail')
             ->view('email');
     }
 }
