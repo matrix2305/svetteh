@@ -47,6 +47,7 @@ class PortalController extends Controller
         );
 
         SendEmail::dispatch($request->all());
+        Event::dispatch(new SendedMessageToDatabaseEvent($request->all()));
         return redirect()->back()->with('success','Uspešno poslata poruka!');
     }
 }
