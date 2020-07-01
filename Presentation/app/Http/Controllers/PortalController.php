@@ -42,7 +42,7 @@ class PortalController extends Controller
             [
                 'name' => 'required|string:40',
                 'email' => 'required|email|max:70',
-                'subject' => 'required|string'
+                'message' => 'required|string'
             ]
         );
 
