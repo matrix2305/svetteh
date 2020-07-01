@@ -4,7 +4,7 @@
 
 @section('content')
     <main class="main">
-        @if(!empty($posts))
+        @if(!empty($posts) and count($posts)>3)
             <div class="posts-grid">
                 @for($i = 0; $i<3; $i++)
                     @if($i == 0)
@@ -28,7 +28,14 @@
             </div>
         @endif
             @foreach($posts as $post)
-                @if($loop->index > 3)
+                @if(count($posts)>3)
+                    @if($loop->index > 3)
+                        <div class="posts-list">
+                            <h1>{{$post->title}}</h1>
+                            <p>{{$post->text}}</p>
+                        </div>
+                    @endif
+                @else
                     <div class="posts-list">
                         <h1>{{$post->title}}</h1>
                         <p>{{$post->text}}</p>
