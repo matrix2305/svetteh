@@ -31,14 +31,16 @@
                 @if(count($posts)>3)
                     @if($loop->index > 3)
                         <div class="posts-list">
+                            <img src="/images/posts/{{$post->image_path}}">
                             <h1>{{$post->title}}</h1>
-                            <p>{{$post->text}}</p>
+                            <p>{{substr($post->text, 0, 250)}}...</p>
                         </div>
                     @endif
                 @else
                     <div class="posts-list">
+                        <img src="/images/posts/{{$post->image_path}}">
                         <h1>{{$post->title}}</h1>
-                        <p>{{$post->text}}</p>
+                        <p>{{substr($post->text, 0, 250)}}...</p>
                     </div>
                 @endif
             @endforeach

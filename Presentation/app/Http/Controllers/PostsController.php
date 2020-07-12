@@ -111,12 +111,12 @@ class PostsController extends Controller
 
 
         try {
-            if ($request->hasFile('avatar')){
-                $avatar = $request->file('image');
-                unlink(public_path('/images/posts'.$request->input('lastimage')));
-                $extension = $avatar->getExtension();
-                $image_name = time().$extension;
-                $avatar->move(public_path('/images/posts/'.$image_name));
+            if ($request->hasFile('image')){
+                $image = $request->file('image');
+                unlink(public_path('/images/posts/'.$request->input('lastimage')));
+                $extension = $image->extension();
+                $image_name = time().'.'.$extension;
+                $image->move(public_path('/images/posts/'),  $image_name);
             }else{
                 $image_name = null;
             }
@@ -131,8 +131,8 @@ class PostsController extends Controller
                 ]
             );
 
-            return redirect()->route('posts')->with('success', 'Uspešne izmene!');
-        }catch (Exception $exception){
+            return redirect()->route('posts')->with('updated', 'Uspešne izmene!');
+        }catch (Exception $exception) {
             return redirect()->back()->with('error', 'Neuspešne izmene!');
         }
 

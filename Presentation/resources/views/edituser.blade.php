@@ -28,7 +28,7 @@
                     <form action="{{route('updateusers')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('patch')
-                        <img class="image-avatar" src="{{public_path('/images/avatars'.$user->avatar_path)}}" alt="Korisnik nema avatar!">
+                        <img class="image-avatar" src="/images/avatars/{{$user->avatar_path}}" alt="Korisnik nema avatar!">
                         <input type="file" name="avatar"><br>
                         <input type="hidden" name="lastavatar" value="{{$user->avatar_path}}">
                         @error('avatar')

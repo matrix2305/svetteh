@@ -91,21 +91,18 @@ class UsersController extends Controller
                 'lastavatar' => 'required|string:30',
                 'avatar' => 'image|mimes:jpg,png,svg,bmp,jpeg|max:4096',
                 'username' => 'required|string:30',
-                'name' => 'string:30',
-                'lastname' => 'string:50',
                 'email' => 'required|email',
                 'role' => 'required|integer',
-                'password' => 'min:8|confirmed',
             ]
         );
 
         try {
             if ($request->hasFile('avatar')){
                 $avatar = $request->file('avatar');
-                unlink(public_path('/images/avatar'.$request->input('lastavatar')));
-                $extension = $avatar->getExtension();
-                $avatar_name = time().$extension;
-                $avatar->move(public_path('/images/avatars/'.$avatar_name));
+                unlink(public_path('/images/avatar/'.$request->input('lastavatar')));
+                $extension = $avatar->extension();
+                $avatar_name = time().'.'.$extension;
+                $avatar->move(public_path('/images/avatars/'), $avatar_name);
             }else{
                 $avatar_name = null;
             }
@@ -119,7 +116,7 @@ class UsersController extends Controller
                     'lastname' => $request->input('lastname'),
                     'email' => $request->input('email'),
                     'role_id' => $request->input('role'),
-                    'password' => Hash::make($request->input('password'))
+                    'password' => (empty($request->input('password')))? null : Hash::make($request->input('password'))
                 ]
             );
 

@@ -67,7 +67,7 @@ class PostsService implements IPostsService
     public function updatePost(array $data)
     {
         try {
-            $post = $this->postsRepository->getOnePosts($data['id']);
+            $post = $this->postsRepository->getOnePosts(intval($data['id']));
             $post->setTitle($data['title']);
             $post->setText($data['text']);
             if(!empty($data['image'])){
